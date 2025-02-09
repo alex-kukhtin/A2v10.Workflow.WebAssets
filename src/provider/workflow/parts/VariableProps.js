@@ -1,7 +1,16 @@
-import { TextFieldEntry } from '@bpmn-io/properties-panel';
+import { TextFieldEntry, CheckboxEntry } from '@bpmn-io/properties-panel';
 
 import { useService } from 'bpmn-js-properties-panel';
 
+/**
+ * ToggleSwitchEntry,
+ * CollapsibleEntry,
+ * CheckboxEntry
+ * SelectEntry,
+ * TextAreaEntry
+ * ReferenceSelectEntry
+ * 
+ */
 
 export default function VariableProps(props) {
 
@@ -22,6 +31,18 @@ export default function VariableProps(props) {
 			component: Value,
 			idPrefix,
 			parameter
+		},
+		{
+			id: idPrefix + '-external',
+			component: External,
+			idPrefix,
+			parameter
+		},
+		{
+			id: idPrefix + '-correlationid',
+			component: CorrelationId,
+			idPrefix,
+			parameter
 		}
 	];
 
@@ -35,7 +56,6 @@ function Name(props) {
 		parameter
 	} = props;
 
-	console.dir(props);
 	const commandStack = useService('commandStack');
 	const translate = useService('translate');
 	const debounce = useService('debounceInput');
@@ -97,16 +117,70 @@ function Value(props) {
 		setValue,
 		debounce
 	});
-
-	/** 
-	 * ToggleSwitchEntry,
-	 * CollapsibleEntry,
-	 * CheckboxEntry
-	 * SelectEntry,
-	 * TextAreaEntry
-	 * ReferenceSelectEntry
-	 * 
-	 */
 }
 
+function External(props) {
+	const {
+		idPrefix,
+		element,
+		parameter
+	} = props;
 
+	const commandStack = useService('commandStack');
+	const translate = useService('translate');
+
+	const setValue = (value) => {
+		commandStack.execute('element.updateModdleProperties', {
+			element,
+			moddleElement: parameter,
+			properties: {
+				External: value
+			}
+		});
+	};
+
+	const getValue = (parameter) => {
+		return parameter.External || false;
+	};
+
+	return CheckboxEntry({
+		element: parameter,
+		id: idPrefix + '-external',
+		label: translate('External'),
+		getValue,
+		setValue
+	});
+}
+
+function CorrelationId(props) {
+	const {
+		idPrefix,
+		element,
+		parameter
+	} = props;
+
+	const commandStack = useService('commandStack');
+	const translate = useService('translate');
+
+	const setValue = (value) => {
+		commandStack.execute('element.updateModdleProperties', {
+			element,
+			moddleElement: parameter,
+			properties: {
+				CorrelationId: value
+			}
+		});
+	};
+
+	const getValue = (parameter) => {
+		return parameter.CorrelationId || false;
+	};
+
+	return CheckboxEntry({
+		element: parameter,
+		id: idPrefix + '-correlationid',
+		label: translate('CorrelationId'),
+		getValue,
+		setValue
+	});
+}

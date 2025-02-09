@@ -48,6 +48,9 @@ function removeFactory({ commandStack, element, parameter }) {
     return function (event) {
         event.stopPropagation();
 
+        const extension = getVariablesExtension(element);
+        if (!extension)
+            return;
 
         const parameters = without(extension.get('values'), parameter);
 

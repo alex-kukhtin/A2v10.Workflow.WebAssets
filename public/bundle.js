@@ -106934,6 +106934,16 @@
       return ids.nextPrefixed(prefix);
   }
 
+  /**
+   * ToggleSwitchEntry,
+   * CollapsibleEntry,
+   * CheckboxEntry
+   * SelectEntry,
+   * TextAreaEntry
+   * ReferenceSelectEntry
+   * 
+   */
+
   function VariableProps(props) {
 
   	const {
@@ -106953,6 +106963,18 @@
   			component: Value,
   			idPrefix,
   			parameter
+  		},
+  		{
+  			id: idPrefix + '-external',
+  			component: External,
+  			idPrefix,
+  			parameter
+  		},
+  		{
+  			id: idPrefix + '-correlationid',
+  			component: CorrelationId,
+  			idPrefix,
+  			parameter
   		}
   	];
 
@@ -106966,7 +106988,6 @@
   		parameter
   	} = props;
 
-  	console.dir(props);
   	const commandStack = useService('commandStack');
   	const translate = useService('translate');
   	const debounce = useService('debounceInput');
@@ -107030,6 +107051,72 @@
   	});
   }
 
+  function External(props) {
+  	const {
+  		idPrefix,
+  		element,
+  		parameter
+  	} = props;
+
+  	const commandStack = useService('commandStack');
+  	const translate = useService('translate');
+
+  	const setValue = (value) => {
+  		commandStack.execute('element.updateModdleProperties', {
+  			element,
+  			moddleElement: parameter,
+  			properties: {
+  				External: value
+  			}
+  		});
+  	};
+
+  	const getValue = (parameter) => {
+  		return parameter.External || false;
+  	};
+
+  	return CheckboxEntry({
+  		element: parameter,
+  		id: idPrefix + '-external',
+  		label: translate('External'),
+  		getValue,
+  		setValue
+  	});
+  }
+
+  function CorrelationId(props) {
+  	const {
+  		idPrefix,
+  		element,
+  		parameter
+  	} = props;
+
+  	const commandStack = useService('commandStack');
+  	const translate = useService('translate');
+
+  	const setValue = (value) => {
+  		commandStack.execute('element.updateModdleProperties', {
+  			element,
+  			moddleElement: parameter,
+  			properties: {
+  				CorrelationId: value
+  			}
+  		});
+  	};
+
+  	const getValue = (parameter) => {
+  		return parameter.CorrelationId || false;
+  	};
+
+  	return CheckboxEntry({
+  		element: parameter,
+  		id: idPrefix + '-correlationid',
+  		label: translate('CorrelationId'),
+  		getValue,
+  		setValue
+  	});
+  }
+
   function VariablesProps({ element, injector }) {
 
       const parameters = getVariables(element) || [];
@@ -107062,6 +107149,9 @@
       return function (event) {
           event.stopPropagation();
 
+          const extension = getVariablesExtension(element);
+          if (!extension)
+              return;
 
           const parameters = without(extension.get('values'), parameter);
 
@@ -107156,8 +107246,6 @@
 
       this.getGroups = function (element) {
 
-          console.dir(propertiesPanel);
-
           return function (groups) {
 
               if (!isAny(element, ['bpmn:Process', 'bpmn:SubProcess', 'bpmn:Collaboration', 'bpmn:Participant']))
@@ -107196,44 +107284,48 @@
   	"prefix": "wf",
   	"uri": "clr-namespace:A2v10.Workflow;assembly=A2v10.Workflow",
   	"associations": [],
-  	"xml": {
-  		"tagAlias": "pascalCase"
-  	},
   	"types": [
   		{
-  			"name": "Variables",
+  			name: "Variables",
   			"superClass": ["Element"],
-  			"properties": [
+  			properties: [
   				{
-  					"name": "values",
-  					"isMany": true,
-  					"type": "Variable"
+  					name: "values",
+  					isMany: true,
+  					type: "Variable"
   				}
   			]
   		},
   		{
-  			"name": "Variable",
-  			"superClass": [
+  			name: "Variable",
+  			superClass: [
   				"Element"
   			],
-  			"properties": [
+  			properties: [
   				{
-  					"name": "Name",
-  					"isAttr": true,
-  					"type": "String"
+  					name: "Name",
+  					isAttr: true,
+  					type: "String"
   				},
   				{
-  					"name": "Value",
-  					"isAttr": true,
-  					"type": "String"
+  					name: "Value",
+  					isAttr: true,
+  					type: "String"
+  				},
+  				{
+  					name: "External",
+  					isAttr: true,
+  					type: "Boolean"
+  				},
+  				{
+  					name: "CorrelationId",
+  					isAttr: true,
+  					type: "Boolean"
   				}
   			]
   		}
   	]
   };
-
-  console.dir(WorkflowPropertiesProvider);
-  console.dir(workflowModdleDescriptor);
 
   function main() {
   	this.createViewer = function (container) {

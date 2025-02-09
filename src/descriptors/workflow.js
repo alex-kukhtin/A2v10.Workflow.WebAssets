@@ -3,36 +3,43 @@ export default {
 	"prefix": "wf",
 	"uri": "clr-namespace:A2v10.Workflow;assembly=A2v10.Workflow",
 	"associations": [],
-	"xml": {
-		"tagAlias": "pascalCase"
-	},
 	"types": [
 		{
-			"name": "Variables",
+			name: "Variables",
 			"superClass": ["Element"],
-			"properties": [
+			properties: [
 				{
-					"name": "values",
-					"isMany": true,
-					"type": "Variable"
+					name: "values",
+					isMany: true,
+					type: "Variable"
 				}
 			]
 		},
 		{
-			"name": "Variable",
-			"superClass": [
+			name: "Variable",
+			superClass: [
 				"Element"
 			],
-			"properties": [
+			properties: [
 				{
-					"name": "Name",
-					"isAttr": true,
-					"type": "String"
+					name: "Name",
+					isAttr: true,
+					type: "String"
 				},
 				{
-					"name": "Value",
-					"isAttr": true,
-					"type": "String"
+					name: "Value",
+					isAttr: true,
+					type: "String"
+				},
+				{
+					name: "External",
+					isAttr: true,
+					type: "Boolean"
+				},
+				{
+					name: "CorrelationId",
+					isAttr: true,
+					type: "Boolean"
 				}
 			]
 		}

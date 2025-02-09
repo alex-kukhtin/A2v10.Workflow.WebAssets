@@ -10,8 +10,6 @@ export default function WorkflowPropertiesProvider(propertiesPanel, injector, tr
 
     this.getGroups = function (element) {
 
-        console.dir(propertiesPanel);
-
         return function (groups) {
 
             if (!isAny(element, ['bpmn:Process', 'bpmn:SubProcess', 'bpmn:Collaboration', 'bpmn:Participant']))

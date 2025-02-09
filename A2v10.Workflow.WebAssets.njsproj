@@ -32,6 +32,7 @@
     <Content Include="public\index.html">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="resources\test.bpmn" />
     <Content Include="rollup.config.js" />
     <Content Include="package.json" />
     <Content Include="README.md" />
@@ -57,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="public\" />
+    <Folder Include="resources\" />
     <Folder Include="src\" />
     <Folder Include="src\descriptors\" />
     <Folder Include="src\provider\" />

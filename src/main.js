@@ -16,9 +16,6 @@ import { BpmnPropertiesPanelModule, BpmnPropertiesProviderModule} from 'bpmn-js-
 import WorkflowPropertiesProvider from './provider/workflow';
 import workflowModdleDescriptor from './descriptors/workflow';
 
-console.dir(WorkflowPropertiesProvider);
-console.dir(workflowModdleDescriptor);
-
 export default function() {
 	this.createViewer = function (container) {
 		return new NavigatedViewer({
