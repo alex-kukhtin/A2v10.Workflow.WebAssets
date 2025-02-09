@@ -1,0 +1,179 @@
+<!doctype html>
+<html>
+<head lang='en'>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width'>
+    <title>Sample Modeler</title>
+
+    <!-- required viewer styles -->
+    <link rel="stylesheet" href="https://unpkg.com/bpmn-js@18.2.0/dist/assets/bpmn-js.css">
+    <link rel="stylesheet" href="https://unpkg.com/bpmn-js@18.2.0/dist/assets/diagram-js.css">
+    <link rel="stylesheet" href="https://unpkg.com/bpmn-js@18.2.0/dist/assets/bpmn-font/css/bpmn.css">
+    <link rel="stylesheet" href="https://unpkg.com/@bpmn-io/properties-panel@4.0.0-2/dist/assets/properties-panel.css" />
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            color: #333;
+            font-weight: 300;
+        }
+
+        html, body, #canvas {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+
+        #log {
+            position:absolute;
+            bottom:20px;
+            left: 20px;
+        }
+
+		#properties-panel {
+            position:absolute;
+            right:0;
+            top:0;
+            bottom:0;
+            width:280px;
+            background-color:#fdfdfd;
+            z-index:10;
+            border-left:1px solid #ccc;
+            overflow:auto;
+		}
+
+		.djs-popup.color-picker .entry {
+			margin: 0;
+		}
+
+		.djs-popup.color-picker .djs-popup-group {
+			display: grid;
+			grid: auto-flow / 1fr 1fr 1fr;
+		}
+
+
+    </style>
+</head>
+<body>
+    <div id="canvas"></div>
+    <div id="properties-panel"></div>
+
+
+    <button id="log">LOG to console</button>
+
+    <script src='bundle.js'></script>
+
+    <script>
+
+        const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                    xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                    xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+                    xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xmlns:wf="clr-namespace:A2v10.Workflow;assembly=A2v10.Workflow">
+                <process id="Process_1" isExecutable="true">
+                    <extensionElements>
+                        <wf:Variables />
+                    </extensionElements>
+                    <startEvent id="StartEvent_1y45yut" name="Start">
+                        <outgoing>SequenceFlow_0h21x7r</outgoing>
+                    </startEvent>
+                    <task id="Activity_1q4vvhs">
+                        <incoming>SequenceFlow_0h21x7r</incoming>
+                        <outgoing>Flow_1mtt2co</outgoing>
+                    </task>
+                    <endEvent id="EndEvent_0sk8619" name="End">
+                        <incoming>Flow_1mtt2co</incoming>
+                    </endEvent>
+                    <sequenceFlow id="SequenceFlow_0h21x7r" sourceRef="StartEvent_1y45yut" targetRef="Activity_1q4vvhs" />
+                    <sequenceFlow id="Flow_1mtt2co" sourceRef="Activity_1q4vvhs" targetRef="EndEvent_0sk8619" />
+                </process>
+                <bpmndi:BPMNDiagram id="BpmnDiagram_1">
+                    <bpmndi:BPMNPlane id="BpmnPlane_1" bpmnElement="Process_1">
+                        <bpmndi:BPMNEdge id="SequenceFlow_0h21x7r_di" bpmnElement="SequenceFlow_0h21x7r">
+                            <omgdi:waypoint x="188" y="210" />
+                            <omgdi:waypoint x="290" y="210" />
+                        </bpmndi:BPMNEdge>
+                        <bpmndi:BPMNEdge id="Flow_1mtt2co_di" bpmnElement="Flow_1mtt2co">
+                            <omgdi:waypoint x="390" y="210" />
+                            <omgdi:waypoint x="482" y="210" />
+                        </bpmndi:BPMNEdge>
+                        <bpmndi:BPMNShape id="StartEvent_1y45yut_di" bpmnElement="StartEvent_1y45yut">
+                            <omgdc:Bounds x="152" y="192" width="36" height="36" />
+                            <bpmndi:BPMNLabel>
+                                <omgdc:Bounds x="159" y="235" width="23" height="14" />
+                            </bpmndi:BPMNLabel>
+                        </bpmndi:BPMNShape>
+                        <bpmndi:BPMNShape id="Event_0sk8619_di" bpmnElement="EndEvent_0sk8619">
+                            <omgdc:Bounds x="482" y="192" width="36" height="36" />
+                            <bpmndi:BPMNLabel>
+                                <omgdc:Bounds x="489" y="235" width="23" height="14" />
+                            </bpmndi:BPMNLabel>
+                        </bpmndi:BPMNShape>
+                        <bpmndi:BPMNShape id="Activity_1q4vvhs_di" bpmnElement="Activity_1q4vvhs">
+                            <omgdc:Bounds x="290" y="170" width="100" height="80" />
+                        </bpmndi:BPMNShape>
+                    </bpmndi:BPMNPlane>
+                </bpmndi:BPMNDiagram>
+</definitions>
+`;
+
+        //var diagramUrl = 'https://cdn.statically.io/gh/bpmn-io/bpmn-js-examples/dfceecba/starter/diagram.bpmn';
+        var diagramUrl = 'file:///D:/Samples/bpmn-js/custom-bundle/bpmn/first_process.bpmn';
+
+        // viewer instance
+        // имя из Rollup.config!
+        var assets = new window.BpmnAssets();
+
+		var bpmnViewer = assets.createModeler('#canvas', "#properties-panel");
+
+
+        document.getElementById('log').addEventListener('click', async () => {
+			console.dir(bpmnViewer);
+			let xml = await bpmnViewer.saveXML();
+			console.log(xml.xml);
+        })
+
+        /**
+         * Open diagram in our viewer instance.
+         *
+         * @param {String} bpmnXML diagram to display
+         */
+        async function openDiagram(bpmnXML) {
+
+            // import diagram
+            try {
+
+                await bpmnViewer.importXML(xml);
+
+                // access viewer components
+                var canvas = bpmnViewer.get('canvas');
+                var overlays = bpmnViewer.get('overlays');
+
+
+                // zoom to fit full viewport
+                canvas.zoom('fit-viewport');
+
+                /*
+                // attach an overlay to a node
+                overlays.add('SCAN_OK', 'note', {
+                    position: {
+                        bottom: 0,
+                        right: 0
+                    },
+                    html: '<div class="diagram-note">Mixed up the labels?</div>'
+                });
+
+                // add marker
+                canvas.addMarker('SCAN_OK', 'needs-discussion');
+                */
+            } catch (err) {
+
+                return console.error('could not import BPMN 2.0 diagram', err);
+            }
+        }
+
+		openDiagram(xml);
+    </script>
+</body>
+</html>
