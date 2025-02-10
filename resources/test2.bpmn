@@ -14,10 +14,10 @@
 			<outgoing>SequenceFlow_0h21x7r</outgoing>
 		</startEvent>
 		<endEvent id="EndEvent_0sk8619">
-			<incoming>Flow_1mtt2co</incoming>
+			<incoming>Flow_1dy6cdt</incoming>
 		</endEvent>
 		<sequenceFlow id="SequenceFlow_0h21x7r" sourceRef="StartEvent_1y45yut" targetRef="Activity_1q4vvhs" />
-		<sequenceFlow id="Flow_1mtt2co" sourceRef="Activity_1q4vvhs" targetRef="EndEvent_0sk8619" />
+		<sequenceFlow id="Flow_1mtt2co" sourceRef="Activity_1q4vvhs" targetRef="CallActivity" />
 		<UserTask id="Activity_1q4vvhs" name="UserText" wf:bookmark="Bookmark">
 			<extensionElements>
 				<wf:Inbox>INBOX</wf:Inbox>
@@ -26,16 +26,29 @@
 			<incoming>SequenceFlow_0h21x7r</incoming>
 			<outgoing>Flow_1mtt2co</outgoing>
 		</UserTask>
+		<sequenceFlow id="Flow_1dy6cdt" sourceRef="CallActivity" targetRef="EndEvent_0sk8619" />
+		<callActivity id="CallActivity" calledElement="calledElement">
+			<extensionElements>
+				<wf:Parameters>CalledElement Parameters</wf:Parameters>
+				<wf:Script></wf:Script>
+			</extensionElements>
+			<incoming>Flow_1mtt2co</incoming>
+			<outgoing>Flow_1dy6cdt</outgoing>
+		</callActivity>
 	</process>
 	<bpmndi:BPMNDiagram id="BpmnDiagram_1">
 		<bpmndi:BPMNPlane id="BpmnPlane_1" bpmnElement="Process_1">
 			<bpmndi:BPMNEdge id="Flow_1mtt2co_di" bpmnElement="Flow_1mtt2co">
 				<omgdi:waypoint x="390" y="210" />
-				<omgdi:waypoint x="482" y="210" />
+				<omgdi:waypoint x="440" y="210" />
 			</bpmndi:BPMNEdge>
 			<bpmndi:BPMNEdge id="SequenceFlow_0h21x7r_di" bpmnElement="SequenceFlow_0h21x7r">
 				<omgdi:waypoint x="188" y="210" />
 				<omgdi:waypoint x="290" y="210" />
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge id="Flow_1dy6cdt_di" bpmnElement="Flow_1dy6cdt">
+				<omgdi:waypoint x="540" y="210" />
+				<omgdi:waypoint x="652" y="210" />
 			</bpmndi:BPMNEdge>
 			<bpmndi:BPMNShape id="StartEvent_1y45yut_di" bpmnElement="StartEvent_1y45yut">
 				<omgdc:Bounds x="152" y="192" width="36" height="36" />
@@ -43,11 +56,14 @@
 					<omgdc:Bounds x="159" y="235" width="23" height="14" />
 				</bpmndi:BPMNLabel>
 			</bpmndi:BPMNShape>
-			<bpmndi:BPMNShape id="Event_0sk8619_di" bpmnElement="EndEvent_0sk8619">
-				<omgdc:Bounds x="482" y="192" width="36" height="36" />
-			</bpmndi:BPMNShape>
 			<bpmndi:BPMNShape id="Activity_0n3sia4_di" bpmnElement="Activity_1q4vvhs">
 				<omgdc:Bounds x="290" y="170" width="100" height="80" />
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape id="Event_0sk8619_di" bpmnElement="EndEvent_0sk8619">
+				<omgdc:Bounds x="652" y="192" width="36" height="36" />
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape id="Activity_00ousli_di" bpmnElement="CallActivity">
+				<omgdc:Bounds x="440" y="170" width="100" height="80" />
 			</bpmndi:BPMNShape>
 		</bpmndi:BPMNPlane>
 	</bpmndi:BPMNDiagram>

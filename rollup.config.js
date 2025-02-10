@@ -2,6 +2,7 @@ import nodeResolve from '@rollup/plugin-node-resolve';
 import json from '@rollup/plugin-json';
 import commonjs from '@rollup/plugin-commonjs';
 import terser from '@rollup/plugin-terser';
+import css from 'rollup-plugin-import-css';
 
 // `npm run build` -> `production` is true
 // `npm run dev` -> `production` is false
@@ -22,6 +23,10 @@ export default {
 		}),
 		commonjs(), // converts date-fns to ES modules
 		json(),
+		css({
+			output: 'wfbundle.css',
+			minify: true
+		}),
 		production && terser()
 	]
 };

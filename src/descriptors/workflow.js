@@ -81,6 +81,32 @@ export default {
 					"type": "String"
 				}
 			]
+		},
+		{
+			name: "Inbox",
+			superClass: [
+				"Element"
+			],
+			properties: [
+				{
+					name: "text",
+					type: "String",
+					isBody: true
+				}
+			]
+		},
+		{
+			name: "Parameters",
+			superClass: [
+				"Element"
+			],
+			properties: [
+				{
+					name: "text",
+					type: "String",
+					isBody: true
+				}
+			]
 		}
 	]
 }

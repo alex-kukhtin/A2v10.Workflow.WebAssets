@@ -5,11 +5,14 @@
     <meta name='viewport' content='width=device-width'>
     <title>Sample Modeler</title>
 
+    <link rel="stylesheet" href="wfbundle.css">
     <!-- required viewer styles -->
+    <!--
     <link rel="stylesheet" href="https://unpkg.com/bpmn-js@18.2.0/dist/assets/bpmn-js.css">
     <link rel="stylesheet" href="https://unpkg.com/bpmn-js@18.2.0/dist/assets/diagram-js.css">
     <link rel="stylesheet" href="https://unpkg.com/bpmn-js@18.2.0/dist/assets/bpmn-font/css/bpmn.css">
     <link rel="stylesheet" href="https://unpkg.com/@bpmn-io/properties-panel@4.0.0-2/dist/assets/properties-panel.css" />
+        -->
     <style>
         body {
             font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -24,42 +27,40 @@
         }
 
         #log {
-            position:absolute;
-            bottom:20px;
+            position: absolute;
+            bottom: 20px;
             left: 20px;
         }
 
-		#properties-panel {
-            position:absolute;
-            right:0;
-            top:0;
-            bottom:0;
-            width:280px;
-            background-color:#fdfdfd;
-            z-index:100;
-            border-left:1px solid #ccc;
-            overflow:auto;
-		}
+        #properties-panel {
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 280px;
+            background-color: #fdfdfd;
+            z-index: 100;
+            border-left: 1px solid #ccc;
+            overflow: auto;
+        }
 
-		.bio-properties-panel-tooltip-wrapper {
-            pointer-events:none;
-            text-decoration:none;
-		}
+        .bio-properties-panel-tooltip-wrapper {
+            pointer-events: none;
+            text-decoration: none;
+        }
 
-		.bjs-powered-by {
-			z-index: 150 !important;
-		}
+        .bjs-powered-by {
+            z-index: 150 !important;
+        }
 
-		.djs-popup.color-picker .entry {
-			margin: 0;
-		}
+        .djs-popup.color-picker .entry {
+            margin: 0;
+        }
 
-		.djs-popup.color-picker .djs-popup-group {
-			display: grid;
-			grid: auto-flow / 1fr 1fr 1fr;
-		}
-
-
+        .djs-popup.color-picker .djs-popup-group {
+            display: grid;
+            grid: auto-flow / 1fr 1fr 1fr;
+        }
     </style>
 </head>
 <body>

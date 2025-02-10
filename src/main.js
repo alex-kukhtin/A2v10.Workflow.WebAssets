@@ -10,6 +10,10 @@ import ColorPickerModule from 'bpmn-js-color-picker';
 
 import modeling from 'bpmn-js/lib/features/modeling';
 
+import '../node_modules/bpmn-js/dist/assets/bpmn-js.css';
+import '../node_modules/bpmn-js/dist/assets/diagram-js.css';
+import '../node_modules/bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
+import '../node_modules/@bpmn-io/properties-panel/dist/assets/properties-panel.css';
 
 import { BpmnPropertiesPanelModule, BpmnPropertiesProviderModule} from 'bpmn-js-properties-panel';
 
