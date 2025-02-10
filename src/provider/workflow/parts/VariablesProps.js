@@ -1,14 +1,6 @@
-import {
-    getBusinessObject
-} from 'bpmn-js/lib/util/ModelUtil';
+import { getBusinessObject} from 'bpmn-js/lib/util/ModelUtil';
 
-import {
-    createElement,
-    createVariables,
-    getVariables,
-    getVariablesExtension,
-    nextId
-} from '../util';
+import { getOrCreateExtensionElements, createElement, getExtension, nextId } from '../util';
 
 import VariableProps from './VariableProps';
 
@@ -17,7 +9,9 @@ import { without } from 'min-dash';
 
 export default function VariablesProps({ element, injector }) {
 
-    const parameters = getVariables(element) || [];
+    let bo = getBusinessObject(element);
+    const vars = getExtension(bo, 'wf:Variables');
+    const parameters = vars ? vars.get('values') : [];
 
     const bpmnFactory = injector.get('bpmnFactory'),
         commandStack = injector.get('commandStack');
@@ -48,7 +42,8 @@ function removeFactory({ commandStack, element, parameter }) {
     return function (event) {
         event.stopPropagation();
 
-        const extension = getVariablesExtension(element);
+        let bo = getBusinessObject(element);
+        const extension = getExtension(bo, 'wf:Variables');
         if (!extension)
             return;
 
@@ -70,36 +65,17 @@ function addFactory({ element, bpmnFactory, commandStack }) {
 
         const commands = [];
 
-        const businessObject = getBusinessObject(element);
-
-        let extensionElements = businessObject.get('extensionElements');
+        const bo = getBusinessObject(element);
 
         // (1) ensure extension elements
-        if (!extensionElements) {
-            extensionElements = createElement(
-                'bpmn:ExtensionElements',
-                { values: [] },
-                businessObject,
-                bpmnFactory
-            );
 
-            commands.push({
-                cmd: 'element.updateModdleProperties',
-                context: {
-                    element,
-                    moddleElement: businessObject,
-                    properties: { extensionElements }
-                }
-            });
-        }
+        let extensionElements = getOrCreateExtensionElements(element, bpmnFactory, commands);
 
-        let extension = getVariablesExtension(element);
+        let extension = getExtension(bo, 'wf:Variables');
 
         // (2) ensure variables extension
         if (!extension) {
-            extension = createVariables({
-                values: []
-            }, extensionElements, bpmnFactory);
+            extension = createElement('wf:Variables', { values: [] }, extensionElements, bpmnFactory);
 
             commands.push({
                 cmd: 'element.updateModdleProperties',

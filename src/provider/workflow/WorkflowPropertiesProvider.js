@@ -1,6 +1,8 @@
 import variablesProps from './parts/VariablesProps';
+import globalProps from './parts/GlobalProps';
+import detailsProps from './parts/DetailsProps';
 
-import { ListGroup } from '@bpmn-io/properties-panel';
+import { ListGroup, Group } from '@bpmn-io/properties-panel';
 
 import { is, isAny } from 'bpmn-js/lib/util/ModelUtil';
 
@@ -8,15 +10,24 @@ const LOW_PRIORITY = 500;
 
 export default function WorkflowPropertiesProvider(propertiesPanel, injector, translate) {
 
-    this.getGroups = function (element) {
-
+    this.getGroups = (element) => {
         return function (groups) {
 
-            if (!isAny(element, ['bpmn:Process', 'bpmn:SubProcess', 'bpmn:Collaboration', 'bpmn:Participant']))
-                return groups;
+            let set = false;
+            if (isAny(element, ['bpmn:Process', 'bpmn:Collaboration'])) {
+                groups.push(createGlobalGroup(element, injector, translate));
+                set = true;
+            }
 
-            groups.push(createVariablesGroup(element, injector, translate));
-
+            if (isAny(element, ['bpmn:Process', 'bpmn:SubProcess', 'bpmn:Collaboration', 'bpmn:Participant'])) {
+                groups.push(createVariablesGroup(element, injector, translate));
+                set = true;
+            }
+            if (!set) {
+                let details = createDetailsGroup(element, injector, translate);
+                if (details)
+                    groups.push(details);
+            }
             return groups;
         };
     };
@@ -36,4 +47,28 @@ function createVariablesGroup(element, injector, translate) {
     };
 
     return variablesGroup;
+}
+
+function createGlobalGroup(element, injector, translate) {
+    const entries = [...globalProps({ element, injector })];
+    const globalGroup = {
+        id: 'global',
+        label: translate('Global Script'),
+        entries,
+        component: Group
+    };
+
+    return globalGroup;
+}
+
+function createDetailsGroup(element, injector, translate) {
+    const entries = [...detailsProps({ element, injector})];
+    if (!entries.length)
+        return null;
+    return {
+        id: 'details',
+        label: translate('Details'),
+        entries,
+        component: Group
+    };
 }

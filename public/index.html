@@ -36,9 +36,18 @@
             bottom:0;
             width:280px;
             background-color:#fdfdfd;
-            z-index:10;
+            z-index:100;
             border-left:1px solid #ccc;
             overflow:auto;
+		}
+
+		.bio-properties-panel-tooltip-wrapper {
+            pointer-events:none;
+            text-decoration:none;
+		}
+
+		.bjs-powered-by {
+			z-index: 150 !important;
 		}
 
 		.djs-popup.color-picker .entry {
@@ -72,16 +81,13 @@
                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                     xmlns:wf="clr-namespace:A2v10.Workflow;assembly=A2v10.Workflow">
                 <process id="Process_1" isExecutable="true">
-                    <extensionElements>
-                        <wf:Variables />
-                    </extensionElements>
                     <startEvent id="StartEvent_1y45yut" name="Start">
                         <outgoing>SequenceFlow_0h21x7r</outgoing>
                     </startEvent>
-                    <task id="Activity_1q4vvhs">
+                    <userTask id="Activity_1q4vvhs">
                         <incoming>SequenceFlow_0h21x7r</incoming>
                         <outgoing>Flow_1mtt2co</outgoing>
-                    </task>
+                    </userTask>
                     <endEvent id="EndEvent_0sk8619" name="End">
                         <incoming>Flow_1mtt2co</incoming>
                     </endEvent>
@@ -130,7 +136,7 @@
 
         document.getElementById('log').addEventListener('click', async () => {
 			console.dir(bpmnViewer);
-			let xml = await bpmnViewer.saveXML();
+            let xml = await bpmnViewer.saveXML();
 			console.log(xml.xml);
         })
 

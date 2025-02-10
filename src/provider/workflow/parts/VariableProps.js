@@ -14,10 +14,7 @@ import { useService } from 'bpmn-js-properties-panel';
 
 export default function VariableProps(props) {
 
-	const {
-		idPrefix,
-		parameter
-	} = props;
+	const {idPrefix, parameter } = props;
 
 	const entries = [
 		{

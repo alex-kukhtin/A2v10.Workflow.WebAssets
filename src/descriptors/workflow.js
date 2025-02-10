@@ -5,8 +5,8 @@ export default {
 	"associations": [],
 	"types": [
 		{
-			name: "Variables",
-			"superClass": ["Element"],
+			name: 'Variables',
+			"superClass": ['Element'],
 			properties: [
 				{
 					name: "values",
@@ -18,7 +18,7 @@ export default {
 		{
 			name: "Variable",
 			superClass: [
-				"Element"
+				'Element'
 			],
 			properties: [
 				{
@@ -40,6 +40,45 @@ export default {
 					name: "CorrelationId",
 					isAttr: true,
 					type: "Boolean"
+				}
+			]
+		},
+		{
+			name: "GlobalScript",
+			superClass: [
+				'Element'
+			],
+			properties: [
+				{
+					name: "text",
+					type: "String",
+					isBody: true
+				}
+			]
+		},
+		{
+			name: 'Script',
+			superClass: [
+				'Element'
+			],
+			properties: [
+				{
+					name: "text",
+					type: "String",
+					isBody: true
+				}
+			]
+		},
+		{
+			name: "wfUserTask",
+			extends: [
+				"bpmn:UserTask"
+			],
+			properties: [
+				{
+					"name": "bookmark",
+					"isAttr": true,
+					"type": "String"
 				}
 			]
 		}

@@ -106893,22 +106893,12 @@
     bpmnPropertiesProvider: ['type', BpmnPropertiesProvider]
   };
 
-  function getVariablesExtension(element) {
-      const businessObject = getBusinessObject(element);
-      return getExtension(businessObject, 'wf:Variables');
-  }
-
-  function getVariables(element) {
-      const variables = getVariablesExtension(element);
-      return variables && variables.get('values');
-  }
-
-  function getExtension(element, type) {
-      if (!element.extensionElements) {
+  function getExtension(bo, type) {
+      if (!bo.extensionElements) {
           return null;
       }
 
-      return element.extensionElements.values.filter(function (e) {
+      return bo.extensionElements.values.filter(function (e) {
           return e.$instanceOf(type);
       })[0];
   }
@@ -106923,15 +106913,43 @@
       return element;
   }
 
-  function createVariables(properties, parent, bpmnFactory) {
-      return createElement('wf:Variables', properties, parent, bpmnFactory);
-  }
-
 
   function nextId(prefix) {
       const ids = new Ids$1([32, 32, 1]);
 
       return ids.nextPrefixed(prefix);
+  }
+
+  function getExtensionElement(elem, type) {
+      if (!elem) return null;
+      const bo = getBusinessObject(elem);
+      return getExtension(bo, type);
+  }
+
+  function getOrCreateExtensionElements(elem, bpmnFactory, commands) {
+
+      const bo = getBusinessObject(elem);
+      let ee = bo.get('extensionElements');
+
+      // (1) ensure extension elements
+      if (!ee) {
+          ee = createElement(
+              'bpmn:ExtensionElements',
+              { values: [] },
+              bo,
+              bpmnFactory
+          );
+
+          commands.push({
+              cmd: 'element.updateModdleProperties',
+              context: {
+                  element: elem,
+                  moddleElement: bo,
+                  properties: { extensionElements: ee }
+              }
+          });
+      }
+      return ee;
   }
 
   /**
@@ -106946,10 +106964,7 @@
 
   function VariableProps(props) {
 
-  	const {
-  		idPrefix,
-  		parameter
-  	} = props;
+  	const {idPrefix, parameter } = props;
 
   	const entries = [
   		{
@@ -107119,7 +107134,9 @@
 
   function VariablesProps({ element, injector }) {
 
-      const parameters = getVariables(element) || [];
+      let bo = getBusinessObject(element);
+      const vars = getExtension(bo, 'wf:Variables');
+      const parameters = vars ? vars.get('values') : [];
 
       const bpmnFactory = injector.get('bpmnFactory'),
           commandStack = injector.get('commandStack');
@@ -107149,7 +107166,8 @@
       return function (event) {
           event.stopPropagation();
 
-          const extension = getVariablesExtension(element);
+          let bo = getBusinessObject(element);
+          const extension = getExtension(bo, 'wf:Variables');
           if (!extension)
               return;
 
@@ -107171,36 +107189,17 @@
 
           const commands = [];
 
-          const businessObject = getBusinessObject(element);
-
-          let extensionElements = businessObject.get('extensionElements');
+          const bo = getBusinessObject(element);
 
           // (1) ensure extension elements
-          if (!extensionElements) {
-              extensionElements = createElement(
-                  'bpmn:ExtensionElements',
-                  { values: [] },
-                  businessObject,
-                  bpmnFactory
-              );
 
-              commands.push({
-                  cmd: 'element.updateModdleProperties',
-                  context: {
-                      element,
-                      moddleElement: businessObject,
-                      properties: { extensionElements }
-                  }
-              });
-          }
+          let extensionElements = getOrCreateExtensionElements(element, bpmnFactory, commands);
 
-          let extension = getVariablesExtension(element);
+          let extension = getExtension(bo, 'wf:Variables');
 
           // (2) ensure variables extension
           if (!extension) {
-              extension = createVariables({
-                  values: []
-              }, extensionElements, bpmnFactory);
+              extension = createElement('wf:Variables', { values: [] }, extensionElements, bpmnFactory);
 
               commands.push({
                   cmd: 'element.updateModdleProperties',
@@ -107240,19 +107239,144 @@
       };
   }
 
+  function GlobalProps(props) {
+  	return [
+  		{
+  			id: 'global',
+  			component: GlobalScriptProperty,
+  			isEdited: (node) => node && !!node.value
+  		}
+  	];
+  }
+
+  function GlobalScriptProperty(props) {
+
+  	const {element} = props;
+
+  	const commandStack = useService('commandStack');
+  	const translate = useService('translate');
+  	const debounce = useService('debounceInput');
+  	const bpmnFactory = useService('bpmnFactory');
+
+  	const setValue = (value) => {
+
+  		const commands = [];
+  		const bo = getBusinessObject(element);
+
+  		// (1) ensure extension elements
+  		let ee = getOrCreateExtensionElements(element, bpmnFactory, commands);
+
+  		let gse = getExtension(bo, 'wf:GlobalScript');
+  		// (2) ensure GlobalScript extension
+
+  		if (!gse) {
+  			gse = createElement('wf:GlobalScript', {text: 'element text'}, ee, bpmnFactory);
+  			commands.push({
+  				cmd: 'element.updateModdleProperties',
+  				context: {
+  					element,
+  					moddleElement: ee,
+  					properties: {
+  						values: [...ee.get('values'), gse]
+  					}
+  				}
+  			});
+  		}
+
+  		// (3) update value
+  		commands.push({
+  			cmd: 'element.updateModdleProperties',
+  			context: {
+  				element,
+  				moddleElement: gse,
+  				properties: {
+  					text: value
+  				}
+  			}
+  		});
+
+  		commandStack.execute('properties-panel.multi-command-executor', commands);
+  	};
+
+  	const getValue = (parameter) => {
+  		let ee = getExtensionElement(element, 'wf:GlobalScript');
+  		return ee ? ee.text : '';
+  	};
+
+  	return TextAreaEntry({
+  		element,
+  		id: 'global',
+  		label: translate('Script'),
+  		monospace: true,
+  		rows:7,
+  		getValue,
+  		setValue, 
+  		debounce
+  	});
+  }
+
+  function DetailsProps(props) {
+  	const { element} = props;
+  	const entries = [];
+
+  	if (is$2(element, 'bpmn:UserTask')) {
+  		entries.push({
+  			id: 'bookmark',
+  			component: Bookmark
+  		});
+  	}
+  	return entries;
+  }
+
+  function Bookmark(props) {
+  	const { element } = props;
+
+  	const translate = useService('translate');
+  	const debounce = useService('debounceInput');
+  	const modeling = useService('modeling');
+
+  	const setValue = (value) => {
+  		modeling.updateProperties(element, {
+  			bookmark: value
+  		});
+  	};
+
+  	const getValue = (parameter) => {
+  		return element.businessObject.bookmark ?? '';
+  	};
+
+  	return TextfieldEntry({
+  		element,
+  		id: 'bookmark',
+  		label: translate('Bookmark'),
+  		getValue,
+  		setValue,
+  		debounce
+  	});
+  }
+
   const LOW_PRIORITY = 500;
 
   function WorkflowPropertiesProvider$1(propertiesPanel, injector, translate) {
 
-      this.getGroups = function (element) {
-
+      this.getGroups = (element) => {
           return function (groups) {
 
-              if (!isAny(element, ['bpmn:Process', 'bpmn:SubProcess', 'bpmn:Collaboration', 'bpmn:Participant']))
-                  return groups;
+              let set = false;
+              if (isAny(element, ['bpmn:Process', 'bpmn:Collaboration'])) {
+                  groups.push(createGlobalGroup(element, injector, translate));
+                  set = true;
+              }
 
-              groups.push(createVariablesGroup(element, injector, translate));
-
+              if (isAny(element, ['bpmn:Process', 'bpmn:SubProcess', 'bpmn:Collaboration', 'bpmn:Participant'])) {
+                  groups.push(createVariablesGroup(element, injector, translate));
+                  set = true;
+              }
+              if (!set) {
+                  let details = createDetailsGroup(element, injector, translate);
+                  if (details)
+                      groups.push(details);
+              }
               return groups;
           };
       };
@@ -107274,6 +107398,30 @@
       return variablesGroup;
   }
 
+  function createGlobalGroup(element, injector, translate) {
+      const entries = [...GlobalProps()];
+      const globalGroup = {
+          id: 'global',
+          label: translate('Global Script'),
+          entries,
+          component: Group
+      };
+
+      return globalGroup;
+  }
+
+  function createDetailsGroup(element, injector, translate) {
+      const entries = [...DetailsProps({ element})];
+      if (!entries.length)
+          return null;
+      return {
+          id: 'details',
+          label: translate('Details'),
+          entries,
+          component: Group
+      };
+  }
+
   var WorkflowPropertiesProvider = {
   	__init__: ['propertiesProvider'],
   	propertiesProvider: ['type', WorkflowPropertiesProvider$1]
@@ -107286,8 +107434,8 @@
   	"associations": [],
   	"types": [
   		{
-  			name: "Variables",
-  			"superClass": ["Element"],
+  			name: 'Variables',
+  			"superClass": ['Element'],
   			properties: [
   				{
   					name: "values",
@@ -107299,7 +107447,7 @@
   		{
   			name: "Variable",
   			superClass: [
-  				"Element"
+  				'Element'
   			],
   			properties: [
   				{
@@ -107321,6 +107469,45 @@
   					name: "CorrelationId",
   					isAttr: true,
   					type: "Boolean"
+  				}
+  			]
+  		},
+  		{
+  			name: "GlobalScript",
+  			superClass: [
+  				'Element'
+  			],
+  			properties: [
+  				{
+  					name: "text",
+  					type: "String",
+  					isBody: true
+  				}
+  			]
+  		},
+  		{
+  			name: 'Script',
+  			superClass: [
+  				'Element'
+  			],
+  			properties: [
+  				{
+  					name: "text",
+  					type: "String",
+  					isBody: true
+  				}
+  			]
+  		},
+  		{
+  			name: "wfUserTask",
+  			extends: [
+  				"bpmn:UserTask"
+  			],
+  			properties: [
+  				{
+  					"name": "bookmark",
+  					"isAttr": true,
+  					"type": "String"
   				}
   			]
   		}
