@@ -54,3 +54,10 @@
 .djs-container > svg[data-element-id]:focus {
 	outline: none;
 }
+
+input[type="checkbox"].bio-properties-panel-input {
+	opacity: unset;
+	width: unset;
+	height: unset;
+	position: unset;
+}
