@@ -12,7 +12,7 @@ const production = !process.env.ROLLUP_WATCH;
 export default {
 	input: 'src/main.js',
 	output: {
-		file: 'public/bundle.js',
+		file: production ? 'public/assets/bpmnfull.min.js': 'public/assets/bpmnfull.js',
 		name:"BpmnAssets",
 		format: 'umd',
 		sourcemap: true
@@ -24,7 +24,7 @@ export default {
 		commonjs(), // converts date-fns to ES modules
 		json(),
 		css({
-			output: 'wfbundle.css',
+			output: production ? 'bpmnfull.min.css' : 'bpmnfull.css',
 			minify: true
 		}),
 		production && terser()

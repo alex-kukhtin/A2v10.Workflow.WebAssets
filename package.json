@@ -1,5 +1,5 @@
 {
-	"name": "sample-modeler",
+	"name": "workflow.web.assets",
 	"version": "0.0.0",
 	"type": "module",
 	"description": "A2v10.Workflow.WebAssets",
@@ -14,9 +14,8 @@
 	},
 	"dependencies": {
 		"bpmn-js": "^18.2.0",
-		"bpmn-js-color-picker": "0.7.1",
+		"bpmn-js-color-picker": "^0.7.1",
 		"bpmn-js-properties-panel": "^6.0.0-2",
-		"date-fns": "^2.16.1",
 		"diagram-js": "^15.2.4",
 		"diagram-js-grid": "^1.1.0",
 		"inherits-browser": "^0.1.0"

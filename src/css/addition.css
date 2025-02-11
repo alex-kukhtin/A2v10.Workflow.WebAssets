@@ -1,0 +1,56 @@
+
+.bpmn-container, .bpmn-canvas {
+	height: 100%;
+	padding: 0;
+	margin: 0;
+}
+
+.bpmn-container .bpmn-pp-toggle {
+	position:absolute;
+	z-index:100;
+	right:4px;
+	top:8px;
+}
+
+.bpmn-props-panel {
+	position: absolute;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	width: 0;
+	background-color: #fdfdfd;
+	z-index: 100;
+	border-left: 1px solid #ccc;
+	overflow: auto;
+}
+
+.bpmn-props-panel .bio-properties-panel-entry {
+	margin-right:12px;
+}
+
+.bpmn-props-panel.open {
+	width: 280px;
+}
+
+.bio-properties-panel-tooltip-wrapper {
+	pointer-events: none;
+	text-decoration: none;
+}
+
+.bjs-powered-by {
+	z-index: 150 !important;
+}
+
+.djs-popup.color-picker .entry {
+	margin: 0;
+}
+
+.djs-popup.color-picker .djs-popup-group {
+	display: grid;
+	grid: auto-flow / 1fr 1fr 1fr;
+}
+
+
+.djs-container > svg[data-element-id]:focus {
+	outline: none;
+}
