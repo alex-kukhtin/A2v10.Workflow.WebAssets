@@ -1,4 +1,4 @@
-
+﻿
 .bpmn-container, .bpmn-canvas {
 	height: 100%;
 	padding: 0;
@@ -26,6 +26,10 @@
 
 .bpmn-props-panel .bio-properties-panel-entry {
 	margin-right:12px;
+}
+
+.bpmn-props-panel .bio-properties-panel-input {
+	border-radius:4px;
 }
 
 .bpmn-props-panel.open {

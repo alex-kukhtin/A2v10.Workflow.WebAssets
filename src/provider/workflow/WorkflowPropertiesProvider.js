@@ -1,10 +1,11 @@
-import variablesProps from './parts/VariablesProps';
+﻿import variablesProps from './parts/VariablesProps';
 import globalProps from './parts/GlobalProps';
 import detailsProps from './parts/DetailsProps';
+import conditionalProps from './parts/CondtionalProps';
 
 import { ListGroup, Group } from '@bpmn-io/properties-panel';
 
-import { is, isAny } from 'bpmn-js/lib/util/ModelUtil';
+import { isAny } from 'bpmn-js/lib/util/ModelUtil';
 
 const LOW_PRIORITY = 500;
 
@@ -27,6 +28,9 @@ export default function WorkflowPropertiesProvider(propertiesPanel, injector, tr
                 let details = createDetailsGroup(element, injector, translate);
                 if (details)
                     groups.push(details);
+                let conditional = createConditionalGroup(element, injector, translate);
+                if (conditional)
+					groups.push(conditional);
             }
             return groups;
         };
@@ -68,6 +72,18 @@ function createDetailsGroup(element, injector, translate) {
     return {
         id: 'details',
         label: translate('Details'),
+        entries,
+        component: Group
+    };
+}
+
+function createConditionalGroup(element, injector, translate) {
+    const entries = [...conditionalProps({ element, injector })];
+    if (!entries.length)
+        return null;
+    return {
+        id: 'conditional',
+        label: translate('Condition'),
         entries,
         component: Group
     };

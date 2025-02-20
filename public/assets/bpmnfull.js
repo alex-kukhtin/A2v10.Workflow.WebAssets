@@ -78716,7 +78716,7 @@
   /**
   Used to indicate [text direction](https://codemirror.net/6/docs/ref/#view.EditorView.textDirection).
   */
-  var Direction = /*@__PURE__*/(function (Direction) {
+  var Direction$1 = /*@__PURE__*/(function (Direction) {
       // (These are chosen to match the base levels, in bidi algorithm
       // terms, of spans in that direction.)
       /**
@@ -78727,8 +78727,8 @@
       Right-to-left.
       */
       Direction[Direction["RTL"] = 1] = "RTL";
-  return Direction})(Direction || (Direction = {}));
-  const LTR = Direction.LTR, RTL = Direction.RTL;
+  return Direction})(Direction$1 || (Direction$1 = {}));
+  const LTR = Direction$1.LTR, RTL = Direction$1.RTL;
   // Decode a string with each type encoded as log2(type)
   function dec(str) {
       let result = [];
@@ -79991,7 +79991,7 @@
           let result = [], { from, to } = viewport;
           let contentWidth = this.view.contentDOM.clientWidth;
           let isWider = contentWidth > Math.max(this.view.scrollDOM.clientWidth, this.minWidth) + 1;
-          let widest = -1, ltr = this.view.textDirection == Direction.LTR;
+          let widest = -1, ltr = this.view.textDirection == Direction$1.LTR;
           for (let pos = 0, i = 0; i < this.children.length; i++) {
               let child = this.children[i], end = pos + child.length;
               if (end > to)
@@ -80020,7 +80020,7 @@
       }
       textDirectionAt(pos) {
           let { i } = this.childPos(pos, 1);
-          return getComputedStyle(this.children[i].dom).direction == "rtl" ? Direction.RTL : Direction.LTR;
+          return getComputedStyle(this.children[i].dom).direction == "rtl" ? Direction$1.RTL : Direction$1.LTR;
       }
       measureTextSize() {
           for (let child of this.children) {
@@ -80130,7 +80130,7 @@
               right: rect.right + margins.right, bottom: rect.bottom + margins.bottom
           };
           let { offsetWidth, offsetHeight } = this.view.scrollDOM;
-          scrollRectIntoView(this.view.scrollDOM, targetRect, range.head < range.anchor ? -1 : 1, target.x, target.y, Math.max(Math.min(target.xMargin, offsetWidth), -offsetWidth), Math.max(Math.min(target.yMargin, offsetHeight), -offsetHeight), this.view.textDirection == Direction.LTR);
+          scrollRectIntoView(this.view.scrollDOM, targetRect, range.head < range.anchor ? -1 : 1, target.x, target.y, Math.max(Math.min(target.xMargin, offsetWidth), -offsetWidth), Math.max(Math.min(target.yMargin, offsetHeight), -offsetHeight), this.view.textDirection == Direction$1.LTR);
       }
   }
   function betweenUneditable(pos) {
@@ -80509,7 +80509,7 @@
       if (coords) {
           let editorRect = view.dom.getBoundingClientRect();
           let direction = view.textDirectionAt(line.from);
-          let pos = view.posAtCoords({ x: forward == (direction == Direction.LTR) ? editorRect.right - 1 : editorRect.left + 1,
+          let pos = view.posAtCoords({ x: forward == (direction == Direction$1.LTR) ? editorRect.right - 1 : editorRect.left + 1,
               y: (coords.top + coords.bottom) / 2 });
           if (pos != null)
               return EditorSelection.cursor(pos, forward ? -1 : 1);
@@ -82703,7 +82703,7 @@
           // Flag set when editor content was redrawn, so that the next
           // measure stage knows it must read DOM layout
           this.mustMeasureContent = true;
-          this.defaultTextDirection = Direction.LTR;
+          this.defaultTextDirection = Direction$1.LTR;
           this.visibleRanges = [];
           // Cursor 'assoc' is only significant when the cursor is on a line
           // wrap point, where it must stick to the character that it is
@@ -82795,7 +82795,7 @@
           let dom = view.contentDOM, style = window.getComputedStyle(dom);
           let oracle = this.heightOracle;
           let whiteSpace = style.whiteSpace;
-          this.defaultTextDirection = style.direction == "rtl" ? Direction.RTL : Direction.LTR;
+          this.defaultTextDirection = style.direction == "rtl" ? Direction$1.RTL : Direction$1.LTR;
           let refresh = this.heightOracle.mustRefreshForWrapping(whiteSpace);
           let domRect = dom.getBoundingClientRect();
           let measureContent = refresh || this.mustMeasureContent || this.contentDOMHeight != domRect.height;
@@ -82962,7 +82962,7 @@
           let wrapping = this.heightOracle.lineWrapping;
           let margin = wrapping ? 10000 /* LG.MarginWrap */ : 2000 /* LG.Margin */, halfMargin = margin >> 1, doubleMargin = margin << 1;
           // The non-wrapping logic won't work at all in predominantly right-to-left text.
-          if (this.defaultTextDirection != Direction.LTR && !wrapping)
+          if (this.defaultTextDirection != Direction$1.LTR && !wrapping)
               return [];
           let gaps = [];
           let addGap = (from, to, line, structure) => {
@@ -84921,7 +84921,7 @@
               return rect;
           let line = this.state.doc.lineAt(pos), order = this.bidiSpans(line);
           let span = order[BidiSpan.find(order, pos - line.from, -1, side)];
-          return flattenRect(rect, (span.dir == Direction.LTR) == (side > 0));
+          return flattenRect(rect, (span.dir == Direction$1.LTR) == (side > 0));
       }
       /**
       Return the rectangle around a given character. If `pos` does not
@@ -85365,7 +85365,7 @@
       static update(cache, changes) {
           if (changes.empty && !cache.some(c => c.fresh))
               return cache;
-          let result = [], lastDir = cache.length ? cache[cache.length - 1].dir : Direction.LTR;
+          let result = [], lastDir = cache.length ? cache[cache.length - 1].dir : Direction$1.LTR;
           for (let i = Math.max(0, cache.length - 10); i < cache.length; i++) {
               let entry = cache[i];
               if (entry.dir == lastDir && !changes.touchesRange(entry.from, entry.to))
@@ -85861,7 +85861,7 @@
               let arrow = tooltip.arrow ? tView.dom.querySelector(".cm-tooltip-arrow") : null;
               let arrowHeight = arrow ? 7 /* Arrow.Size */ : 0;
               let width = size.right - size.left, height = (_a = knownHeight.get(tView)) !== null && _a !== void 0 ? _a : size.bottom - size.top;
-              let offset = tView.offset || noOffset, ltr = this.view.textDirection == Direction.LTR;
+              let offset = tView.offset || noOffset, ltr = this.view.textDirection == Direction$1.LTR;
               let left = size.width > space.right - space.left
                   ? (ltr ? space.left : space.right - size.width)
                   : ltr ? Math.max(space.left, Math.min(pos.left - (arrow ? 14 /* Arrow.Offset */ : 0) + offset.x, space.right - width))
@@ -86131,7 +86131,7 @@
                   lastMove.x > posCoords.right + view.defaultCharacterWidth)
                   return;
               let bidi = view.bidiSpans(view.state.doc.lineAt(pos)).find(s => s.from <= pos && s.to >= pos);
-              let rtl = bidi && bidi.dir == Direction.RTL ? -1 : 1;
+              let rtl = bidi && bidi.dir == Direction$1.RTL ? -1 : 1;
               side = (lastMove.x < posCoords.left ? -rtl : rtl);
           }
           let open = this.source(view, pos, side);
@@ -86630,7 +86630,7 @@
           let value = view.plugin(plugin);
           if (!value || value.gutters.length == 0 || !value.fixed)
               return null;
-          return view.textDirection == Direction.LTR
+          return view.textDirection == Direction$1.LTR
               ? { left: value.dom.offsetWidth * view.scaleX }
               : { right: value.dom.offsetWidth * view.scaleX };
       })
@@ -88284,8 +88284,8 @@
       return type.id;
   }
   ({
-      rtl: /*@__PURE__*/Decoration.mark({ class: "cm-iso", inclusive: true, attributes: { dir: "rtl" }, bidiIsolate: Direction.RTL }),
-      ltr: /*@__PURE__*/Decoration.mark({ class: "cm-iso", inclusive: true, attributes: { dir: "ltr" }, bidiIsolate: Direction.LTR })});
+      rtl: /*@__PURE__*/Decoration.mark({ class: "cm-iso", inclusive: true, attributes: { dir: "rtl" }, bidiIsolate: Direction$1.RTL }),
+      ltr: /*@__PURE__*/Decoration.mark({ class: "cm-iso", inclusive: true, attributes: { dir: "ltr" }, bidiIsolate: Direction$1.LTR })});
 
   /**
   An instance of this is passed to completion source functions.
@@ -88658,7 +88658,7 @@
       return a ? b ? a + " " + b : a : b;
   }
   function defaultPositionInfo(view, list, option, info, space, tooltip) {
-      let rtl = view.textDirection == Direction.RTL, left = rtl, narrow = false;
+      let rtl = view.textDirection == Direction$1.RTL, left = rtl, narrow = false;
       let side = "top", offset, maxWidth;
       let spaceLeft = list.left - space.left, spaceRight = space.right - list.right;
       let infoWidth = info.right - info.left, infoHeight = info.bottom - info.top;
@@ -90336,7 +90336,7 @@
       return moveSel(view, range => range.empty ? view.moveByChar(range, forward) : rangeEnd(range, forward));
   }
   function ltrAtCursor(view) {
-      return view.textDirectionAt(view.state.selection.main.head) == Direction.LTR;
+      return view.textDirectionAt(view.state.selection.main.head) == Direction$1.LTR;
   }
   /**
   Move the selection one character to the left (which is backward in
@@ -91924,7 +91924,7 @@
           });
       }
   }
-  var Type;
+  var Type$1;
   (function (Type) {
       Type[Type["Document"] = 1] = "Document";
       Type[Type["CodeBlock"] = 2] = "CodeBlock";
@@ -91972,7 +91972,7 @@
       Type[Type["LinkTitle"] = 42] = "LinkTitle";
       Type[Type["LinkLabel"] = 43] = "LinkLabel";
       Type[Type["URL"] = 44] = "URL";
-  })(Type || (Type = {}));
+  })(Type$1 || (Type$1 = {}));
   /**
   Data structure used to accumulate a block's content during [leaf
   block parsing](#BlockParser.leaf).
@@ -92136,29 +92136,29 @@
           return true;
       if (line.indent >= line.baseIndent + 4)
           return false;
-      let size = (bl.type == Type.OrderedList ? isOrderedList : isBulletList)(line, cx, false);
+      let size = (bl.type == Type$1.OrderedList ? isOrderedList : isBulletList)(line, cx, false);
       return size > 0 &&
-          (bl.type != Type.BulletList || isHorizontalRule(line, cx, false) < 0) &&
+          (bl.type != Type$1.BulletList || isHorizontalRule(line, cx, false) < 0) &&
           line.text.charCodeAt(line.pos + size - 1) == bl.value;
   }
   const DefaultSkipMarkup = {
-      [Type.Blockquote](bl, cx, line) {
+      [Type$1.Blockquote](bl, cx, line) {
           if (line.next != 62 /* '>' */)
               return false;
-          line.markers.push(elt(Type.QuoteMark, cx.lineStart + line.pos, cx.lineStart + line.pos + 1));
+          line.markers.push(elt(Type$1.QuoteMark, cx.lineStart + line.pos, cx.lineStart + line.pos + 1));
           line.moveBase(line.pos + (space(line.text.charCodeAt(line.pos + 1)) ? 2 : 1));
           bl.end = cx.lineStart + line.text.length;
           return true;
       },
-      [Type.ListItem](bl, _cx, line) {
+      [Type$1.ListItem](bl, _cx, line) {
           if (line.indent < line.baseIndent + bl.value && line.next > -1)
               return false;
           line.moveBaseColumn(line.baseIndent + bl.value);
           return true;
       },
-      [Type.OrderedList]: skipForList,
-      [Type.BulletList]: skipForList,
-      [Type.Document]() { return true; }
+      [Type$1.OrderedList]: skipForList,
+      [Type$1.BulletList]: skipForList,
+      [Type$1.Document]() { return true; }
   };
   function space(ch) { return ch == 32 || ch == 9 || ch == 10 || ch == 13; }
   function skipSpace(line, i = 0) {
@@ -92214,7 +92214,7 @@
   function isBulletList(line, cx, breaking) {
       return (line.next == 45 || line.next == 43 || line.next == 42 /* '-+*' */) &&
           (line.pos == line.text.length - 1 || space(line.text.charCodeAt(line.pos + 1))) &&
-          (!breaking || inList(cx, Type.BulletList) || line.skipSpace(line.pos + 2) < line.text.length) ? 1 : -1;
+          (!breaking || inList(cx, Type$1.BulletList) || line.skipSpace(line.pos + 2) < line.text.length) ? 1 : -1;
   }
   function isOrderedList(line, cx, breaking) {
       let pos = line.pos, next = line.next;
@@ -92230,7 +92230,7 @@
       if (pos == line.pos || pos > line.pos + 9 ||
           (next != 46 && next != 41 /* '.)' */) ||
           (pos < line.text.length - 1 && !space(line.text.charCodeAt(pos + 1))) ||
-          breaking && !inList(cx, Type.OrderedList) &&
+          breaking && !inList(cx, Type$1.OrderedList) &&
               (line.skipSpace(pos + 1) == line.text.length || pos > line.pos + 1 || line.next != 49 /* '1' */))
           return -1;
       return pos + 1 - line.pos;
@@ -92283,10 +92283,10 @@
   }
   function addCodeText(marks, from, to) {
       let last = marks.length - 1;
-      if (last >= 0 && marks[last].to == from && marks[last].type == Type.CodeText)
+      if (last >= 0 && marks[last].to == from && marks[last].type == Type$1.CodeText)
           marks[last].to = to;
       else
-          marks.push(elt(Type.CodeText, from, to));
+          marks.push(elt(Type$1.CodeText, from, to));
   }
   // Rules for parsing blocks. A return value of false means the rule
   // doesn't apply here, true means it does. When true is returned and
@@ -92314,7 +92314,7 @@
               else {
                   if (pendingMarks.length) {
                       for (let m of pendingMarks) {
-                          if (m.type == Type.CodeText)
+                          if (m.type == Type$1.CodeText)
                               addCodeText(marks, m.from, m.to);
                           else
                               marks.push(m);
@@ -92331,11 +92331,11 @@
               }
           }
           if (pendingMarks.length) {
-              pendingMarks = pendingMarks.filter(m => m.type != Type.CodeText);
+              pendingMarks = pendingMarks.filter(m => m.type != Type$1.CodeText);
               if (pendingMarks.length)
                   line.markers = pendingMarks.concat(line.markers);
           }
-          cx.addNode(cx.buffer.writeElements(marks, -from).finish(Type.CodeBlock, to - from), from);
+          cx.addNode(cx.buffer.writeElements(marks, -from).finish(Type$1.CodeBlock, to - from), from);
           return true;
       },
       FencedCode(cx, line) {
@@ -92344,9 +92344,9 @@
               return false;
           let from = cx.lineStart + line.pos, ch = line.next, len = fenceEnd - line.pos;
           let infoFrom = line.skipSpace(fenceEnd), infoTo = skipSpaceBack(line.text, line.text.length, infoFrom);
-          let marks = [elt(Type.CodeMark, from, from + len)];
+          let marks = [elt(Type$1.CodeMark, from, from + len)];
           if (infoFrom < infoTo)
-              marks.push(elt(Type.CodeInfo, cx.lineStart + infoFrom, cx.lineStart + infoTo));
+              marks.push(elt(Type$1.CodeInfo, cx.lineStart + infoFrom, cx.lineStart + infoTo));
           for (let first = true; cx.nextLine() && line.depth >= cx.stack.length; first = false) {
               let i = line.pos;
               if (line.indent - line.baseIndent < 4)
@@ -92355,7 +92355,7 @@
               if (i - line.pos >= len && line.skipSpace(i) == line.text.length) {
                   for (let m of line.markers)
                       marks.push(m);
-                  marks.push(elt(Type.CodeMark, cx.lineStart + line.pos, cx.lineStart + i));
+                  marks.push(elt(Type$1.CodeMark, cx.lineStart + line.pos, cx.lineStart + i));
                   cx.nextLine();
                   break;
               }
@@ -92370,15 +92370,15 @@
               }
           }
           cx.addNode(cx.buffer.writeElements(marks, -from)
-              .finish(Type.FencedCode, cx.prevLineEnd() - from), from);
+              .finish(Type$1.FencedCode, cx.prevLineEnd() - from), from);
           return true;
       },
       Blockquote(cx, line) {
           let size = isBlockquote(line);
           if (size < 0)
               return false;
-          cx.startContext(Type.Blockquote, line.pos);
-          cx.addNode(Type.QuoteMark, cx.lineStart + line.pos, cx.lineStart + line.pos + 1);
+          cx.startContext(Type$1.Blockquote, line.pos);
+          cx.addNode(Type$1.QuoteMark, cx.lineStart + line.pos, cx.lineStart + line.pos + 1);
           line.moveBase(line.pos + size);
           return null;
       },
@@ -92387,18 +92387,18 @@
               return false;
           let from = cx.lineStart + line.pos;
           cx.nextLine();
-          cx.addNode(Type.HorizontalRule, from);
+          cx.addNode(Type$1.HorizontalRule, from);
           return true;
       },
       BulletList(cx, line) {
           let size = isBulletList(line, cx, false);
           if (size < 0)
               return false;
-          if (cx.block.type != Type.BulletList)
-              cx.startContext(Type.BulletList, line.basePos, line.next);
+          if (cx.block.type != Type$1.BulletList)
+              cx.startContext(Type$1.BulletList, line.basePos, line.next);
           let newBase = getListIndent(line, line.pos + 1);
-          cx.startContext(Type.ListItem, line.basePos, newBase - line.baseIndent);
-          cx.addNode(Type.ListMark, cx.lineStart + line.pos, cx.lineStart + line.pos + size);
+          cx.startContext(Type$1.ListItem, line.basePos, newBase - line.baseIndent);
+          cx.addNode(Type$1.ListMark, cx.lineStart + line.pos, cx.lineStart + line.pos + size);
           line.moveBaseColumn(newBase);
           return null;
       },
@@ -92406,11 +92406,11 @@
           let size = isOrderedList(line, cx, false);
           if (size < 0)
               return false;
-          if (cx.block.type != Type.OrderedList)
-              cx.startContext(Type.OrderedList, line.basePos, line.text.charCodeAt(line.pos + size - 1));
+          if (cx.block.type != Type$1.OrderedList)
+              cx.startContext(Type$1.OrderedList, line.basePos, line.text.charCodeAt(line.pos + size - 1));
           let newBase = getListIndent(line, line.pos + size);
-          cx.startContext(Type.ListItem, line.basePos, newBase - line.baseIndent);
-          cx.addNode(Type.ListMark, cx.lineStart + line.pos, cx.lineStart + line.pos + size);
+          cx.startContext(Type$1.ListItem, line.basePos, newBase - line.baseIndent);
+          cx.addNode(Type$1.ListMark, cx.lineStart + line.pos, cx.lineStart + line.pos + size);
           line.moveBaseColumn(newBase);
           return null;
       },
@@ -92425,11 +92425,11 @@
           if (after == endOfSpace || after == off || !space(line.text.charCodeAt(after - 1)))
               after = line.text.length;
           let buf = cx.buffer
-              .write(Type.HeaderMark, 0, size)
+              .write(Type$1.HeaderMark, 0, size)
               .writeElements(cx.parser.parseInline(line.text.slice(off + size + 1, after), from + size + 1), -from);
           if (after < line.text.length)
-              buf.write(Type.HeaderMark, after - off, endOfSpace - off);
-          let node = buf.finish(Type.ATXHeading1 - 1 + size, line.text.length - off);
+              buf.write(Type$1.HeaderMark, after - off, endOfSpace - off);
+          let node = buf.finish(Type$1.ATXHeading1 - 1 + size, line.text.length - off);
           cx.nextLine();
           cx.addNode(node, from);
           return true;
@@ -92450,7 +92450,7 @@
           }
           if (trailing)
               cx.nextLine();
-          let nodeType = end == CommentEnd ? Type.CommentBlock : end == ProcessingEnd ? Type.ProcessingInstructionBlock : Type.HTMLBlock;
+          let nodeType = end == CommentEnd ? Type$1.CommentBlock : end == ProcessingEnd ? Type$1.ProcessingInstructionBlock : Type$1.HTMLBlock;
           let to = cx.prevLineEnd();
           cx.addNode(cx.buffer.writeElements(marks, -from).finish(nodeType, to - from), from);
           return true;
@@ -92485,7 +92485,7 @@
           return false;
       }
       complete(cx, leaf, len) {
-          cx.addLeafElement(leaf, elt(Type.LinkReference, this.start, this.start + len, this.elts));
+          cx.addLeafElement(leaf, elt(Type$1.LinkReference, this.start, this.start + len, this.elts));
           return true;
       }
       nextStage(elt) {
@@ -92509,7 +92509,7 @@
                       return -1;
                   if (content.charCodeAt(this.pos) != 58 /* ':' */)
                       return this.stage = -1 /* RefStage.Failed */;
-                  this.elts.push(elt(Type.LinkMark, this.pos + this.start, this.pos + this.start + 1));
+                  this.elts.push(elt(Type$1.LinkMark, this.pos + this.start, this.pos + this.start + 1));
                   this.pos++;
               }
               else if (this.stage == 1 /* RefStage.Label */) {
@@ -92554,9 +92554,9 @@
           let next = line.next;
           if (underline < 0)
               return false;
-          let underlineMark = elt(Type.HeaderMark, cx.lineStart + line.pos, cx.lineStart + underline);
+          let underlineMark = elt(Type$1.HeaderMark, cx.lineStart + line.pos, cx.lineStart + underline);
           cx.nextLine();
-          cx.addLeafElement(leaf, elt(next == 61 ? Type.SetextHeading1 : Type.SetextHeading2, leaf.start, cx.prevLineEnd(), [
+          cx.addLeafElement(leaf, elt(next == 61 ? Type$1.SetextHeading1 : Type$1.SetextHeading2, leaf.start, cx.prevLineEnd(), [
               ...cx.parser.parseInline(leaf.content, leaf.start),
               underlineMark
           ]));
@@ -92619,7 +92619,7 @@
           this.rangeI = 0;
           this.to = ranges[ranges.length - 1].to;
           this.lineStart = this.absoluteLineStart = this.absoluteLineEnd = ranges[0].from;
-          this.block = CompositeBlock.create(Type.Document, 0, this.lineStart, 0, 0);
+          this.block = CompositeBlock.create(Type$1.Document, 0, this.lineStart, 0, 0);
           this.stack = [this.block];
           this.fragments = fragments.length ? new FragmentCursor(fragments, input) : null;
           this.readLine();
@@ -92802,7 +92802,7 @@
           for (; line.depth < this.stack.length; line.depth++) {
               let cx = this.stack[line.depth], handler = this.parser.skipContextMarkup[cx.type];
               if (!handler)
-                  throw new Error("Unhandled block context " + Type[cx.type]);
+                  throw new Error("Unhandled block context " + Type$1[cx.type]);
               if (!handler(cx, this, line))
                   break;
               line.forward();
@@ -92890,7 +92890,7 @@
           let inline = injectMarks(this.parser.parseInline(leaf.content, leaf.start), leaf.marks);
           this.addNode(this.buffer
               .writeElements(inline, -leaf.start)
-              .finish(Type.Paragraph, leaf.content.length), leaf.start);
+              .finish(Type$1.Paragraph, leaf.content.length), leaf.start);
       }
       elt(type, from, to, children) {
           if (typeof type == "string")
@@ -93022,7 +93022,7 @@
                           (bl, cx, line) => composite(cx, line, bl.value);
                   let id = nodeTypes.length;
                   let group = composite ? ["Block", "BlockContext"] : !block ? undefined
-                      : id >= Type.ATXHeading1 && id <= Type.SetextHeading2 ? ["Block", "LeafBlock", "Heading"] : ["Block", "LeafBlock"];
+                      : id >= Type$1.ATXHeading1 && id <= Type$1.SetextHeading2 ? ["Block", "LeafBlock", "Heading"] : ["Block", "LeafBlock"];
                   nodeTypes.push(NodeType.define({
                       id,
                       name,
@@ -93152,11 +93152,11 @@
       return found;
   }
   let nodeTypes = [NodeType.none];
-  for (let i = 1, name; name = Type[i]; i++) {
+  for (let i = 1, name; name = Type$1[i]; i++) {
       nodeTypes[i] = NodeType.define({
           id: i,
           name,
-          props: i >= Type.Escape ? [] : [[NodeProp.group, i in DefaultSkipMarkup ? ["Block", "BlockContext"] : ["Block", "LeafBlock"]]],
+          props: i >= Type$1.Escape ? [] : [[NodeProp.group, i in DefaultSkipMarkup ? ["Block", "BlockContext"] : ["Block", "LeafBlock"]]],
           top: name == "Document"
       });
   }
@@ -93272,14 +93272,14 @@
           let escaped = cx.char(start + 1);
           for (let i = 0; i < Escapable.length; i++)
               if (Escapable.charCodeAt(i) == escaped)
-                  return cx.append(elt(Type.Escape, start, start + 2));
+                  return cx.append(elt(Type$1.Escape, start, start + 2));
           return -1;
       },
       Entity(cx, next, start) {
           if (next != 38 /* '&' */)
               return -1;
           let m = /^(?:#\d+|#x[a-f\d]+|\w+);/i.exec(cx.slice(start + 1, start + 31));
-          return m ? cx.append(elt(Type.Entity, start, start + 1 + m[0].length)) : -1;
+          return m ? cx.append(elt(Type$1.Entity, start, start + 1 + m[0].length)) : -1;
       },
       InlineCode(cx, next, start) {
           if (next != 96 /* '`' */ || start && cx.char(start - 1) == 96)
@@ -93292,9 +93292,9 @@
               if (cx.char(pos) == 96) {
                   curSize++;
                   if (curSize == size && cx.char(pos + 1) != 96)
-                      return cx.append(elt(Type.InlineCode, start, pos + 1, [
-                          elt(Type.CodeMark, start, start + size),
-                          elt(Type.CodeMark, pos + 1 - size, pos + 1)
+                      return cx.append(elt(Type$1.InlineCode, start, pos + 1, [
+                          elt(Type$1.CodeMark, start, start + size),
+                          elt(Type$1.CodeMark, pos + 1 - size, pos + 1)
                       ]));
               }
               else {
@@ -93309,23 +93309,23 @@
           let after = cx.slice(start + 1, cx.end);
           let url = /^(?:[a-z][-\w+.]+:[^\s>]+|[a-z\d.!#$%&'*+/=?^_`{|}~-]+@[a-z\d](?:[a-z\d-]{0,61}[a-z\d])?(?:\.[a-z\d](?:[a-z\d-]{0,61}[a-z\d])?)*)>/i.exec(after);
           if (url) {
-              return cx.append(elt(Type.Autolink, start, start + 1 + url[0].length, [
-                  elt(Type.LinkMark, start, start + 1),
+              return cx.append(elt(Type$1.Autolink, start, start + 1 + url[0].length, [
+                  elt(Type$1.LinkMark, start, start + 1),
                   // url[0] includes the closing bracket, so exclude it from this slice
-                  elt(Type.URL, start + 1, start + url[0].length),
-                  elt(Type.LinkMark, start + url[0].length, start + 1 + url[0].length)
+                  elt(Type$1.URL, start + 1, start + url[0].length),
+                  elt(Type$1.LinkMark, start + url[0].length, start + 1 + url[0].length)
               ]));
           }
           let comment = /^!--[^>](?:-[^-]|[^-])*?-->/i.exec(after);
           if (comment)
-              return cx.append(elt(Type.Comment, start, start + 1 + comment[0].length));
+              return cx.append(elt(Type$1.Comment, start, start + 1 + comment[0].length));
           let procInst = /^\?[^]*?\?>/.exec(after);
           if (procInst)
-              return cx.append(elt(Type.ProcessingInstruction, start, start + 1 + procInst[0].length));
+              return cx.append(elt(Type$1.ProcessingInstruction, start, start + 1 + procInst[0].length));
           let m = /^(?:![A-Z][^]*?>|!\[CDATA\[[^]*?\]\]>|\/\s*[a-zA-Z][\w-]*\s*>|\s*[a-zA-Z][\w-]*(\s+[a-zA-Z:_][\w-.:]*(?:\s*=\s*(?:[^\s"'=<>`]+|'[^']*'|"[^"]*"))?)*\s*(\/\s*)?>)/.exec(after);
           if (!m)
               return -1;
-          return cx.append(elt(Type.HTMLTag, start, start + 1 + m[0].length));
+          return cx.append(elt(Type$1.HTMLTag, start, start + 1 + m[0].length));
       },
       Emphasis(cx, next, start) {
           if (next != 95 && next != 42)
@@ -93344,13 +93344,13 @@
       },
       HardBreak(cx, next, start) {
           if (next == 92 /* '\\' */ && cx.char(start + 1) == 10 /* '\n' */)
-              return cx.append(elt(Type.HardBreak, start, start + 2));
+              return cx.append(elt(Type$1.HardBreak, start, start + 2));
           if (next == 32) {
               let pos = start + 1;
               while (cx.char(pos) == 32)
                   pos++;
               if (cx.char(pos) == 10 && pos >= start + 2)
-                  return cx.append(elt(Type.HardBreak, start, pos + 1));
+                  return cx.append(elt(Type$1.HardBreak, start, pos + 1));
           }
           return -1;
       },
@@ -93377,7 +93377,7 @@
                   // Finish the content and replace the entire range in
                   // this.parts with the link/image node.
                   let content = cx.takeContent(i);
-                  let link = cx.parts[i] = finishLink(cx, content, part.type == LinkStart ? Type.Link : Type.Image, part.from, start + 1);
+                  let link = cx.parts[i] = finishLink(cx, content, part.type == LinkStart ? Type$1.Link : Type$1.Image, part.from, start + 1);
                   // Set any open-link markers before this link to invalid.
                   if (part.type == LinkStart)
                       for (let j = 0; j < i; j++) {
@@ -93393,8 +93393,8 @@
   };
   function finishLink(cx, content, type, start, startPos) {
       let { text } = cx, next = cx.char(startPos), endPos = startPos;
-      content.unshift(elt(Type.LinkMark, start, start + (type == Type.Image ? 2 : 1)));
-      content.push(elt(Type.LinkMark, startPos - 1, startPos));
+      content.unshift(elt(Type$1.LinkMark, start, start + (type == Type$1.Image ? 2 : 1)));
+      content.push(elt(Type$1.LinkMark, startPos - 1, startPos));
       if (next == 40 /* '(' */) {
           let pos = cx.skipSpace(startPos + 1);
           let dest = parseURL(text, pos - cx.offset, cx.offset), title;
@@ -93408,13 +93408,13 @@
               }
           }
           if (cx.char(pos) == 41 /* ')' */) {
-              content.push(elt(Type.LinkMark, startPos, startPos + 1));
+              content.push(elt(Type$1.LinkMark, startPos, startPos + 1));
               endPos = pos + 1;
               if (dest)
                   content.push(dest);
               if (title)
                   content.push(title);
-              content.push(elt(Type.LinkMark, pos, endPos));
+              content.push(elt(Type$1.LinkMark, pos, endPos));
           }
       }
       else if (next == 91 /* '[' */) {
@@ -93435,7 +93435,7 @@
           for (let pos = start + 1; pos < text.length; pos++) {
               let ch = text.charCodeAt(pos);
               if (ch == 62 /* '>' */)
-                  return elt(Type.URL, start + offset, pos + 1 + offset);
+                  return elt(Type$1.URL, start + offset, pos + 1 + offset);
               if (ch == 60 || ch == 10 /* '<\n' */)
                   return false;
           }
@@ -93463,7 +93463,7 @@
                   escaped = true;
               }
           }
-          return pos > start ? elt(Type.URL, start + offset, pos + offset) : pos == text.length ? null : false;
+          return pos > start ? elt(Type$1.URL, start + offset, pos + offset) : pos == text.length ? null : false;
       }
   }
   function parseLinkTitle(text, start, offset) {
@@ -93476,7 +93476,7 @@
           if (escaped)
               escaped = false;
           else if (ch == end)
-              return elt(Type.LinkTitle, start + offset, pos + 1 + offset);
+              return elt(Type$1.LinkTitle, start + offset, pos + 1 + offset);
           else if (ch == 92 /* '\\' */)
               escaped = true;
       }
@@ -93488,7 +93488,7 @@
           if (escaped)
               escaped = false;
           else if (ch == 93 /* ']' */)
-              return requireNonWS ? false : elt(Type.LinkLabel, start + offset, pos + 1 + offset);
+              return requireNonWS ? false : elt(Type$1.LinkLabel, start + offset, pos + 1 + offset);
           else {
               if (requireNonWS && !space(ch))
                   requireNonWS = false;
@@ -93701,7 +93701,7 @@
   }
   // These are blocks that can span blank lines, and should thus only be
   // reused if their next sibling is also being reused.
-  const NotLast = [Type.CodeBlock, Type.ListItem, Type.OrderedList, Type.BulletList];
+  const NotLast = [Type$1.CodeBlock, Type$1.ListItem, Type$1.OrderedList, Type$1.BulletList];
   class FragmentCursor {
       constructor(fragments, input) {
           this.fragments = fragments;
@@ -93768,7 +93768,7 @@
                   cx.addNode(cur.tree, pos);
               }
               else {
-                  let dummy = new Tree(cx.parser.nodeSet.types[Type.Paragraph], [], [], 0, cx.block.hashProp);
+                  let dummy = new Tree(cx.parser.nodeSet.types[Type$1.Paragraph], [], [], 0, cx.block.hashProp);
                   cx.reusePlaceholders.set(dummy, cur.tree);
                   cx.addNode(dummy, pos);
               }
@@ -100257,7 +100257,7 @@
       })]
     });
   }
-  function isEdited(node) {
+  function isEdited$2(node) {
     return node && !!node.value;
   }
 
@@ -104701,13 +104701,13 @@
     return isAny(element, ['bpmn:StartEvent', 'bpmn:BoundaryEvent', 'bpmn:EndEvent']) && !!getErrorEventDefinition(element);
   }
   function getErrorEventDefinition(element) {
-    return getEventDefinition$1(element, 'bpmn:ErrorEventDefinition');
+    return getEventDefinition$1$1(element, 'bpmn:ErrorEventDefinition');
   }
   function getError(element) {
     const errorEventDefinition = getErrorEventDefinition(element);
     return errorEventDefinition && errorEventDefinition.get('errorRef');
   }
-  function getEventDefinition$1(element, eventType) {
+  function getEventDefinition$1$1(element, eventType) {
     const businessObject = getBusinessObject(element);
     const eventDefinitions = businessObject.get('eventDefinitions') || [];
     return find$1(eventDefinitions, function (definition) {
@@ -104721,17 +104721,17 @@
     if (is$2(element, 'bpmn:ReceiveTask')) {
       return getBusinessObject(element);
     }
-    return getEventDefinition$1(element, 'bpmn:MessageEventDefinition');
+    return getEventDefinition$1$1(element, 'bpmn:MessageEventDefinition');
   }
   function getMessage(element) {
     const messageEventDefinition = getMessageEventDefinition(element);
     return messageEventDefinition && messageEventDefinition.get('messageRef');
   }
   function getLinkEventDefinition(element) {
-    return getEventDefinition$1(element, 'bpmn:LinkEventDefinition');
+    return getEventDefinition$1$1(element, 'bpmn:LinkEventDefinition');
   }
   function getSignalEventDefinition$1(element) {
-    return getEventDefinition$1(element, 'bpmn:SignalEventDefinition');
+    return getEventDefinition$1$1(element, 'bpmn:SignalEventDefinition');
   }
   function isLinkSupported(element) {
     return isAny(element, ['bpmn:IntermediateThrowEvent', 'bpmn:IntermediateCatchEvent']) && !!getLinkEventDefinition(element);
@@ -104744,7 +104744,7 @@
     return signalEventDefinition && signalEventDefinition.get('signalRef');
   }
   function getEscalationEventDefinition(element) {
-    return getEventDefinition$1(element, 'bpmn:EscalationEventDefinition');
+    return getEventDefinition$1$1(element, 'bpmn:EscalationEventDefinition');
   }
   function isEscalationSupported(element) {
     return is$2(element, 'bpmn:Event') && !!getEscalationEventDefinition(element);
@@ -104757,7 +104757,7 @@
     return isAny(element, ['bpmn:EndEvent', 'bpmn:IntermediateThrowEvent']) && !!getCompensateEventDefinition(element);
   }
   function getCompensateEventDefinition(element) {
-    return getEventDefinition$1(element, 'bpmn:CompensateEventDefinition');
+    return getEventDefinition$1$1(element, 'bpmn:CompensateEventDefinition');
   }
   function getCompensateActivity(element) {
     const compensateEventDefinition = getCompensateEventDefinition(element);
@@ -105173,11 +105173,11 @@
       entries = [...entries, {
         id: 'errorName',
         component: ErrorName$1,
-        isEdited: isEdited
+        isEdited: isEdited$2
       }, {
         id: 'errorCode',
         component: ErrorCode$2,
-        isEdited: isEdited
+        isEdited: isEdited$2
       }];
     }
     return entries;
@@ -105354,11 +105354,11 @@
       entries = [...entries, {
         id: 'escalationName',
         component: EscalationName,
-        isEdited: isEdited
+        isEdited: isEdited$2
       }, {
         id: 'escalationCode',
         component: EscalationCode$1,
-        isEdited: isEdited
+        isEdited: isEdited$2
       }];
     }
     return entries;
@@ -105630,7 +105630,7 @@
     return [{
       id: 'id',
       component: Id$3,
-      isEdited: isEdited
+      isEdited: isEdited$2
     }];
   }
   function Id$3(props) {
@@ -105683,7 +105683,7 @@
     return [{
       id: 'linkName',
       component: LinkName,
-      isEdited: isEdited
+      isEdited: isEdited$2
     }];
   }
   function LinkName(props) {
@@ -105743,7 +105743,7 @@
       entries = [...entries, {
         id: 'messageName',
         component: MessageName$1,
-        isEdited: isEdited
+        isEdited: isEdited$2
       }];
     }
     return entries;
@@ -105884,11 +105884,11 @@
     const entries = [{
       id: 'loopCardinality',
       component: LoopCardinality,
-      isEdited: isEdited
+      isEdited: isEdited$2
     }, {
       id: 'completionCondition',
       component: CompletionCondition$1,
-      isEdited: isEdited
+      isEdited: isEdited$2
     }];
     return entries;
   }
@@ -106220,11 +106220,11 @@
     return [{
       id: 'processId',
       component: ProcessId,
-      isEdited: isEdited
+      isEdited: isEdited$2
     }, {
       id: 'processName',
       component: ProcessName,
-      isEdited: isEdited
+      isEdited: isEdited$2
     }];
   }
   function ProcessName(props) {
@@ -106326,7 +106326,7 @@
       entries = [...entries, {
         id: 'signalName',
         component: SignalName$1,
-        isEdited: isEdited
+        isEdited: isEdited$2
       }];
     }
     return entries;
@@ -106521,7 +106521,7 @@
       entries.push({
         id: getId$1(idPrefix, 'timerEventDefinitionValue'),
         component: TimerEventDefinitionValue$2,
-        isEdited: isEdited,
+        isEdited: isEdited$2,
         timerEventDefinition,
         timerEventDefinitionType
       });
@@ -106893,6 +106893,10 @@
     bpmnPropertiesProvider: ['type', BpmnPropertiesProvider]
   };
 
+  function isEdited(node) {
+      return node && !!node.value;
+  }
+
   function getExtension(bo, type) {
       if (!bo.extensionElements) {
           return null;
@@ -107003,6 +107007,54 @@
   		return ee ? ee.text : '';
   	}
   }
+  function getBusinessObject$1(element) {
+  	return element && element.businessObject || element;
+  }
+
+  function is$4(element, type) {
+  	var bo = getBusinessObject$1(element);
+  	return bo && typeof bo.$instanceOf === 'function' && bo.$instanceOf(type);
+  }
+
+
+  function getConditionalEventDefinition(element) {
+  	if (!is$4(element, 'bpmn:Event')) {
+  		return false;
+  	}
+  	return getEventDefinition$1(element, 'bpmn:ConditionalEventDefinition');
+  }
+
+  function createFormalExpression(parent, attributes, bpmnFactory) {
+  	return createElement('bpmn:FormalExpression', attributes, is$4(parent, 'bpmn:SequenceFlow') ? getBusinessObject$1(parent) : getConditionalEventDefinition(parent), bpmnFactory);
+  }
+
+  function updateCondition(element, commandStack, condition = undefined) {
+      if (is$4(element, 'bpmn:SequenceFlow')) {
+          commandStack.execute('element.updateProperties', {
+              element,
+              properties: {
+                  conditionExpression: condition
+              }
+          });
+      } else {
+          commandStack.execute('element.updateModdleProperties', {
+              element,
+              moddleElement: getConditionalEventDefinition(element),
+              properties: {
+                  condition
+              }
+          });
+      }
+  }
+
+  function getConditionExpression(element) {
+      const businessObject = getBusinessObject$1(element);
+      if (is$4(businessObject, 'bpmn:SequenceFlow')) {
+          return businessObject.get('conditionExpression');
+      } else if (getConditionalEventDefinition(businessObject)) {
+          return getConditionalEventDefinition(businessObject).get('condition');
+      }
+  }
 
   /**
    * ToggleSwitchEntry,
@@ -107022,6 +107074,18 @@
   		{
   			id: idPrefix + '-name',
   			component: Name,
+  			idPrefix,
+  			parameter
+  		},
+  		{
+  			id: idPrefix + '-type',
+  			component: Type,
+  			idPrefix,
+  			parameter
+  		},
+  		{
+  			id: idPrefix + '-dir',
+  			component: Direction,
   			idPrefix,
   			parameter
   		},
@@ -107184,6 +107248,88 @@
   	});
   }
 
+
+  function Type(props) {
+  	const { element, parameter } = props;
+
+  	const commandStack = useService('commandStack');
+  	const translate = useService('translate');
+
+  	const getValue = (parameter) => {
+  		return parameter.Type || 'String';
+  	};	
+
+  	const setValue = (value) => {
+  		commandStack.execute('element.updateModdleProperties', {
+  			element,
+  			moddleElement: parameter,
+  			properties: {
+  				Type: value
+  			}
+  		});
+  	};
+
+  	const getOptions = (elem) => {
+  		return [
+  			{ value: 'String', label: 'String' },
+  			{ value: 'Number', label: 'Number' },
+  			{ value: 'Boolean', label: 'Boolean' },
+  			{ value: 'Object', label: 'Object' },
+  			{ value: 'PersistentObject', label: 'PersistentObject' },
+  			{ value: 'Bigint', label: 'Bigint' },
+  			{ value: 'Date', label: 'Date' },
+  			{ value: 'Guid', label: 'Guid' }
+  		];
+  	};
+  	return SelectEntry({
+  		element,
+  		id: 'variableType',
+  		label: translate('Type'),
+  		getValue,
+  		setValue,
+  		getOptions
+  	});
+  }
+
+  function Direction(props) {
+  	const { element, parameter } = props;
+
+  	const commandStack = useService('commandStack');
+  	const translate = useService('translate');
+
+  	const getValue = (parameter) => {
+  		return parameter.Dir || 'Local';
+  	};
+
+  	const setValue = (value) => {
+  		commandStack.execute('element.updateModdleProperties', {
+  			element,
+  			moddleElement: parameter,
+  			properties: {
+  				Dir: value
+  			}
+  		});
+  	};
+
+  	const getOptions = (elem) => {
+  		return [
+  			{ value: 'Local', label: 'Local' },
+  			{ value: 'In', label: 'In' },
+  			{ value: 'Out', label: 'Out' },
+  			{ value: 'InOut', label: 'InOut' }
+  		];
+  	};
+
+  	return SelectEntry({
+  		element,
+  		id: 'variableDirection',
+  		label: translate('Direction'),
+  		getValue,
+  		setValue,
+  		getOptions
+  	});
+  }
+
   function VariablesProps({ element, injector }) {
 
       let bo = getBusinessObject(element);
@@ -107270,7 +107416,7 @@
               Name: nextId('Variable_'),
               //Value: '',
               Type: 'String',
-              Direction: 'Local'
+              Dir: 'Local'
               //External: false,
               //CorrelationId : false
           }, extension, bpmnFactory);
@@ -107360,6 +107506,7 @@
   			isEdited: (node) => node && !!node.value
   		});
   	}
+
   	return entries;
   }
 
@@ -107390,7 +107537,6 @@
   	});
   }
 
-
   function ScriptProp(props) {
   	const { element } = props;
 
@@ -107411,12 +107557,12 @@
   	return TextAreaEntry({
   		element,
   		id: 'script',
-  		label: translate('Script'),
+  		label:  translate('Script'),
   		monospace: true,
   		rows: 7,
   		getValue,
   		setValue,
-  		debounce
+  		debounce,
   	});
   }
 
@@ -107430,6 +107576,7 @@
   		element,
   		id: 'script',
   		label: translate('Script'),
+  		description: translate('Executed after completion'),
   		monospace: true,
   		rows: 7,
   		getValue: getExtensionElementValue(element, "wf:Script"),
@@ -107501,6 +107648,59 @@
   	});
   }
 
+  function ConditinalProps(props) {
+  	const { element} = props;
+  	const entries = [];
+
+  	const CONDITIONAL_SOURCES = [
+  		'bpmn:Activity',
+  		'bpmn:ExclusiveGateway',
+  		'bpmn:InclusiveGateway',
+  		'bpmn:ComplexGateway'
+  	];
+
+
+  	if (is$2(element, 'bpmn:SequenceFlow') && isAny(element.source, CONDITIONAL_SOURCES)) {
+  		entries.push({
+  			id: 'conditionExpression',
+  			component: ConditionExpression,
+  			isEdited: isEdited
+  		});
+  	}
+  	return entries;
+  }
+
+  function ConditionExpression(props) {
+  	const { element } = props;
+  	const commandStack = useService('commandStack'),
+  		bpmnFactory = useService('bpmnFactory'),
+  		translate = useService('translate'),
+  		debounce = useService('debounceInput');
+
+  	const getValue = () => {
+  		let ce = getConditionExpression(element);
+  		if (ce)
+  			return ce.get('body');
+  		return '';
+  	};
+  	const setValue = value => {
+  		const conditionExpression = createFormalExpression(element, {
+  			body: value
+  		}, bpmnFactory);
+  		updateCondition(element, commandStack, conditionExpression);
+  	};
+  	return TextAreaEntry({
+  		element: element,
+  		id: "conditionExpression",
+  		label: translate('Condition Expression'),
+  		monospace: true,
+  		rows: 1,
+  		getValue: getValue,
+  		setValue: setValue,
+  		debounce: debounce
+  	});
+  }
+
   const LOW_PRIORITY = 500;
 
   function WorkflowPropertiesProvider$1(propertiesPanel, injector, translate) {
@@ -107522,6 +107722,9 @@
                   let details = createDetailsGroup(element, injector, translate);
                   if (details)
                       groups.push(details);
+                  let conditional = createConditionalGroup(element, injector, translate);
+                  if (conditional)
+  					groups.push(conditional);
               }
               return groups;
           };
@@ -107568,6 +107771,18 @@
       };
   }
 
+  function createConditionalGroup(element, injector, translate) {
+      const entries = [...ConditinalProps({ element})];
+      if (!entries.length)
+          return null;
+      return {
+          id: 'conditional',
+          label: translate('Condition'),
+          entries,
+          component: Group
+      };
+  }
+
   var WorkflowPropertiesProvider = {
   	__init__: ['propertiesProvider'],
   	propertiesProvider: ['type', WorkflowPropertiesProvider$1]
@@ -107603,6 +107818,16 @@
   				},
   				{
   					name: "Value",
+  					isAttr: true,
+  					type: "String"
+  				},
+  				{
+  					name: "Type",
+  					isAttr: true,
+  					type: "String"
+  				},
+  				{
+  					name: "Dir",
   					isAttr: true,
   					type: "String"
   				},
@@ -107764,6 +107989,7 @@
   				ColorPickerModule,
   			    index$3,
   				index$2,
+  				//ZeebePropertiesProviderModule,
   				WorkflowPropertiesProvider
   			],
   			moddleExtensions: {

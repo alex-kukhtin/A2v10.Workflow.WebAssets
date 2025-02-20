@@ -1,4 +1,4 @@
-
+﻿
 //import inherits from 'inherits-browser';
 
 import NavigatedViewer from 'bpmn-js/lib/Viewer';
@@ -17,7 +17,8 @@ import '../node_modules/bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
 import '../node_modules/@bpmn-io/properties-panel/dist/assets/properties-panel.css';
 import './css/addition.css';
 
-import { BpmnPropertiesPanelModule, BpmnPropertiesProviderModule} from 'bpmn-js-properties-panel';
+import { BpmnPropertiesPanelModule, BpmnPropertiesProviderModule } from 'bpmn-js-properties-panel';
+//import { ZeebePropertiesProviderModule } from 'bpmn-js-properties-panel';
 
 import WorkflowPropertiesProvider from './provider/workflow';
 import workflowModdleDescriptor from './descriptors/workflow';
@@ -100,6 +101,7 @@ export default function() {
 				ColorPickerModule,
 			    BpmnPropertiesPanelModule,
 				BpmnPropertiesProviderModule,
+				//ZeebePropertiesProviderModule,
 				WorkflowPropertiesProvider
 			],
 			moddleExtensions: {

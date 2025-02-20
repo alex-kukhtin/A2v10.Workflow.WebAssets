@@ -1,7 +1,11 @@
-import Ids from 'ids';
+﻿import Ids from 'ids';
 
 import { getBusinessObject } from 'bpmn-js/lib/util/ModelUtil';
 import { useService } from 'bpmn-js-properties-panel';
+
+export function isEdited(node) {
+    return node && !!node.value;
+}
 
 export function getExtension(bo, type) {
     if (!bo.extensionElements) {
@@ -114,3 +118,51 @@ export function getExtensionElementValue(element, elemName) {
 	}
 };
 
+function getBusinessObject$1(element) {
+	return element && element.businessObject || element;
+}
+
+function is$4(element, type) {
+	var bo = getBusinessObject$1(element);
+	return bo && typeof bo.$instanceOf === 'function' && bo.$instanceOf(type);
+}
+
+
+function getConditionalEventDefinition(element) {
+	if (!is$4(element, 'bpmn:Event')) {
+		return false;
+	}
+	return getEventDefinition$1(element, 'bpmn:ConditionalEventDefinition');
+}
+
+export function createFormalExpression(parent, attributes, bpmnFactory) {
+	return createElement('bpmn:FormalExpression', attributes, is$4(parent, 'bpmn:SequenceFlow') ? getBusinessObject$1(parent) : getConditionalEventDefinition(parent), bpmnFactory);
+}
+
+export function updateCondition(element, commandStack, condition = undefined) {
+    if (is$4(element, 'bpmn:SequenceFlow')) {
+        commandStack.execute('element.updateProperties', {
+            element,
+            properties: {
+                conditionExpression: condition
+            }
+        });
+    } else {
+        commandStack.execute('element.updateModdleProperties', {
+            element,
+            moddleElement: getConditionalEventDefinition(element),
+            properties: {
+                condition
+            }
+        });
+    }
+}
+
+export function getConditionExpression(element) {
+    const businessObject = getBusinessObject$1(element);
+    if (is$4(businessObject, 'bpmn:SequenceFlow')) {
+        return businessObject.get('conditionExpression');
+    } else if (getConditionalEventDefinition(businessObject)) {
+        return getConditionalEventDefinition(businessObject).get('condition');
+    }
+}

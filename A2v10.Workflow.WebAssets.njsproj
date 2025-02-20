@@ -51,6 +51,7 @@
     <Content Include="src\provider\workflow\index.js">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="src\provider\workflow\parts\CondtionalProps.js" />
     <Content Include="src\provider\workflow\parts\DetailsProps.js" />
     <Content Include="src\provider\workflow\parts\GlobalProps.js" />
     <Content Include="src\provider\workflow\parts\VariableProps.js">

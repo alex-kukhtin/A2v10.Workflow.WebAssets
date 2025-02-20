@@ -1,10 +1,12 @@
+﻿
+import { TextFieldEntry, TextAreaEntry } from '@bpmn-io/properties-panel';
 
-import { TextFieldEntry } from '@bpmn-io/properties-panel';
-import { TextAreaEntry } from '@bpmn-io/properties-panel';
+//import * as PropsPanel from '@bpmn-io/properties-panel';
+//console.dir(PropsPanel); 
 
 import { is, isAny } from 'bpmn-js/lib/util/ModelUtil';
 import { useService } from 'bpmn-js-properties-panel';
-import { getExtensionElementValue, setExtensionElementValue } from '../util';
+import { getExtensionElementValue, setExtensionElementValue, createFormalExpression } from '../util';
 
 
 export default function DetailsProps(props) {
@@ -45,8 +47,9 @@ export default function DetailsProps(props) {
 			id: 'script',
 			component: Script,
 			isEdited: (node) => node && !!node.value
-		})
+		});
 	}
+
 	return entries;
 }
 
@@ -77,7 +80,6 @@ function Bookmark(props) {
 	});
 }
 
-
 function ScriptProp(props) {
 	const { element } = props;
 
@@ -98,12 +100,12 @@ function ScriptProp(props) {
 	return TextAreaEntry({
 		element,
 		id: 'script',
-		label: translate('Script'),
+		label:  translate('Script'),
 		monospace: true,
 		rows: 7,
 		getValue,
 		setValue,
-		debounce
+		debounce,
 	});
 }
 
@@ -117,6 +119,7 @@ function Script(props) {
 		element,
 		id: 'script',
 		label: translate('Script'),
+		description: translate('Executed after completion'),
 		monospace: true,
 		rows: 7,
 		getValue: getExtensionElementValue(element, "wf:Script"),
@@ -187,3 +190,4 @@ function Parameters(props) {
 		debounce
 	});
 }
+

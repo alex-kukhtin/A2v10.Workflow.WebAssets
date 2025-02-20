@@ -1,4 +1,4 @@
-export default {
+﻿export default {
 	"name": "wf",
 	"prefix": "wf",
 	"uri": "clr-namespace:A2v10.Workflow;assembly=A2v10.Workflow",
@@ -28,6 +28,16 @@ export default {
 				},
 				{
 					name: "Value",
+					isAttr: true,
+					type: "String"
+				},
+				{
+					name: "Type",
+					isAttr: true,
+					type: "String"
+				},
+				{
+					name: "Dir",
 					isAttr: true,
 					type: "String"
 				},

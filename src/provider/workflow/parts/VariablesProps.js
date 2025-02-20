@@ -1,4 +1,4 @@
-import { getBusinessObject} from 'bpmn-js/lib/util/ModelUtil';
+﻿import { getBusinessObject} from 'bpmn-js/lib/util/ModelUtil';
 
 import { getOrCreateExtensionElements, createElement, getExtension, nextId } from '../util';
 
@@ -94,7 +94,7 @@ function addFactory({ element, bpmnFactory, commandStack }) {
             Name: nextId('Variable_'),
             //Value: '',
             Type: 'String',
-            Direction: 'Local'
+            Dir: 'Local'
             //External: false,
             //CorrelationId : false
         }, extension, bpmnFactory);
