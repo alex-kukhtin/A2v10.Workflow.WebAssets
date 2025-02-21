@@ -16,7 +16,7 @@ export default function VariableProps(props) {
 
 	const {idPrefix, parameter } = props;
 
-	const entries = [
+	return [
 		{
 			id: idPrefix + '-name',
 			component: Name,
@@ -54,16 +54,10 @@ export default function VariableProps(props) {
 			parameter
 		}
 	];
-
-	return entries;
 }
 
 function Name(props) {
-	const {
-		idPrefix,
-		element,
-		parameter
-	} = props;
+	const { idPrefix, element, parameter } = props;
 
 	const commandStack = useService('commandStack');
 	const translate = useService('translate');
@@ -79,26 +73,18 @@ function Name(props) {
 		});
 	};
 
-	const getValue = (parameter) => {
-		return parameter.Name;
-	};
-
 	return TextFieldEntry({
 		element: parameter,
 		id: idPrefix + '-name',
 		label: translate('Name'),
-		getValue,
+		getValue: () => parameter.Name,
 		setValue,
 		debounce
 	});
 }
 
 function Value(props) {
-	const {
-		idPrefix,
-		element,
-		parameter
-	} = props;
+	const { idPrefix, element, parameter } = props;
 
 	const commandStack = useService('commandStack');
 	const translate = useService('translate');
@@ -114,26 +100,18 @@ function Value(props) {
 		});
 	};
 
-	const getValue = (parameter) => {
-		return parameter.Value;
-	};
-
 	return TextFieldEntry({
 		element: parameter,
 		id: idPrefix + '-value',
 		label: translate('Value'),
-		getValue,
+		getValue: () => parameter.Value,
 		setValue,
 		debounce
 	});
 }
 
 function External(props) {
-	const {
-		idPrefix,
-		element,
-		parameter
-	} = props;
+	const {idPrefix, element, parameter} = props;
 
 	const commandStack = useService('commandStack');
 	const translate = useService('translate');
@@ -148,15 +126,11 @@ function External(props) {
 		});
 	};
 
-	const getValue = (parameter) => {
-		return parameter.External || false;
-	};
-
 	return CheckboxEntry({
 		element: parameter,
 		id: idPrefix + '-external',
 		label: translate('External'),
-		getValue,
+		getValue: () => parameter.External || false,
 		setValue
 	});
 }
@@ -181,29 +155,21 @@ function CorrelationId(props) {
 		});
 	};
 
-	const getValue = (parameter) => {
-		return parameter.CorrelationId || false;
-	};
-
 	return CheckboxEntry({
 		element: parameter,
 		id: idPrefix + '-correlationid',
 		label: translate('CorrelationId'),
-		getValue,
+		getValue: () => parameter.CorrelationId || false,	
 		setValue
 	});
 }
 
 
 function Type(props) {
-	const { element, parameter } = props;
+	const { idPrefix, element, parameter } = props;
 
 	const commandStack = useService('commandStack');
 	const translate = useService('translate');
-
-	const getValue = (parameter) => {
-		return parameter.Type || 'String';
-	};	
 
 	const setValue = (value) => {
 		commandStack.execute('element.updateModdleProperties', {
@@ -215,37 +181,32 @@ function Type(props) {
 		});
 	};
 
-	const getOptions = (elem) => {
-		return [
-			{ value: 'String', label: 'String' },
-			{ value: 'Number', label: 'Number' },
-			{ value: 'Boolean', label: 'Boolean' },
-			{ value: 'Object', label: 'Object' },
-			{ value: 'PersistentObject', label: 'PersistentObject' },
-			{ value: 'Bigint', label: 'Bigint' },
-			{ value: 'Date', label: 'Date' },
-			{ value: 'Guid', label: 'Guid' }
-		];
-	};
+	const getOptions = (elem) => [
+		{ value: 'String', label: 'String' },
+		{ value: 'Number', label: 'Number' },
+		{ value: 'Boolean', label: 'Boolean' },
+		{ value: 'Object', label: 'Object' },
+		{ value: 'PersistentObject', label: 'PersistentObject' },
+		{ value: 'Bigint', label: 'Bigint' },
+		{ value: 'Date', label: 'Date' },
+		{ value: 'Guid', label: 'Guid' }
+	];
+
 	return SelectEntry({
 		element,
-		id: 'variableType',
+		id: idPrefix + '-variableType',
 		label: translate('Type'),
-		getValue,
+		getValue: () => parameter.Type || 'String',
 		setValue,
 		getOptions
 	});
 }
 
 function Direction(props) {
-	const { element, parameter } = props;
+	const { idPrefix, element, parameter } = props;
 
 	const commandStack = useService('commandStack');
 	const translate = useService('translate');
-
-	const getValue = (parameter) => {
-		return parameter.Dir || 'Local';
-	};
 
 	const setValue = (value) => {
 		commandStack.execute('element.updateModdleProperties', {
@@ -257,20 +218,18 @@ function Direction(props) {
 		});
 	};
 
-	const getOptions = (elem) => {
-		return [
-			{ value: 'Local', label: 'Local' },
-			{ value: 'In', label: 'In' },
-			{ value: 'Out', label: 'Out' },
-			{ value: 'InOut', label: 'InOut' }
-		];
-	};
+	const getOptions = (elem) => [
+		{ value: 'Local', label: 'Local' },
+		{ value: 'In', label: 'In' },
+		{ value: 'Out', label: 'Out' },
+		{ value: 'InOut', label: 'InOut' }
+	];
 
 	return SelectEntry({
 		element,
-		id: 'variableDirection',
+		id: idPrefix + '-variableDir',
 		label: translate('Direction'),
-		getValue,
+		getValue: () => parameter.Dir || 'Local',
 		setValue,
 		getOptions
 	});
