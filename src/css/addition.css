@@ -41,6 +41,12 @@
 	text-decoration: none;
 }
 
+textarea.bio-properties-panel-input {
+	line-height: 1;
+	white-space:pre;
+	padding:6px;
+}
+
 .bjs-powered-by {
 	z-index: 150 !important;
 }

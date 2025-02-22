@@ -2,6 +2,7 @@
 import globalProps from './parts/GlobalProps';
 import detailsProps from './parts/DetailsProps';
 import conditionalProps from './parts/CondtionalProps';
+import multiInstanceProps from './parts/MultiInstanceProps';
 
 import { ListGroup, Group } from '@bpmn-io/properties-panel';
 
@@ -13,7 +14,6 @@ export default function WorkflowPropertiesProvider(propertiesPanel, injector, tr
 
     this.getGroups = (element) => {
         return function (groups) {
-
             let set = false;
             if (isAny(element, ['bpmn:Process', 'bpmn:Collaboration'])) {
                 groups.push(createGlobalGroup(element, injector, translate));
@@ -32,6 +32,15 @@ export default function WorkflowPropertiesProvider(propertiesPanel, injector, tr
                 if (conditional)
 					groups.push(conditional);
             }
+
+            let mi = groups.find(g => g.id === "multiInstance");
+            if (mi) {
+                // delete std: Loop Cardinality and Loop Condition   
+                let np = multiInstanceProps(element, injector, translate);
+                mi.entries.splice(0);
+				mi.entries.push(...np);
+            }
+
             return groups;
         };
     };

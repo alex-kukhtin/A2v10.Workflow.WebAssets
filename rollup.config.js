@@ -1,5 +1,4 @@
-import nodeResolve from '@rollup/plugin-node-resolve';
-import json from '@rollup/plugin-json';
+﻿import nodeResolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import terser from '@rollup/plugin-terser';
 import css from 'rollup-plugin-import-css';
@@ -22,7 +21,6 @@ export default {
 			browser: true
 		}),
 		commonjs(), // converts date-fns to ES modules
-		json(),
 		css({
 			output: production ? 'bpmnfull.min.css' : 'bpmnfull.css',
 			minify: true
