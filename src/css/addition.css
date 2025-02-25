@@ -42,10 +42,16 @@
 }
 
 textarea.bio-properties-panel-input {
-	line-height: 1;
-	white-space:pre;
-	padding:6px;
+	scrollbar-width:thin;
 }
+
+textarea.bio-properties-panel-input-monospace {
+	line-height: 1;
+	white-space: pre;
+	padding: 6px;
+	font-weight: 600;
+}
+
 
 .bjs-powered-by {
 	z-index: 150 !important;
