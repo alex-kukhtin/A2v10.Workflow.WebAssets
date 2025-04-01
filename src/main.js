@@ -9,7 +9,7 @@ import ZoomScrollModule from 'diagram-js/lib/navigation/zoomscroll';
 import MoveCanvasModule from 'diagram-js/lib/navigation/movecanvas';
 import ColorPickerModule from 'bpmn-js-color-picker';
 
-//import modeling from 'bpmn-js/lib/features/modeling';
+import modeling from 'bpmn-js/lib/features/modeling';
 
 import '../node_modules/bpmn-js/dist/assets/bpmn-js.css';
 import '../node_modules/bpmn-js/dist/assets/diagram-js.css';
@@ -86,8 +86,12 @@ export default function() {
 			additionalModules: [
 				gridModule,
 				MoveCanvasModule,
-				ZoomScrollModule
-			]
+				ZoomScrollModule,
+				modeling
+			],
+			moddleExtensions: {
+				Workflow: workflowModdleDescriptor,
+			}
 		});
 	};
 	this.createModeler = function (container, ppContainer) {

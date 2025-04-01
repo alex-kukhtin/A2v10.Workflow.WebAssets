@@ -54520,7 +54520,7 @@
     return this._elementRegistry.getGraphics(element);
   };
 
-  var ModelingModule = {
+  var modeling = {
     __init__: [
       'modeling',
       'bpmnUpdater'
@@ -54655,7 +54655,7 @@
     __depends__: [
       AutoPlaceModule,
       ComplexPreviewModule,
-      ModelingModule
+      modeling
     ],
     __init__: [ 'appendPreview' ],
     appendPreview: [ 'type', AppendPreview ]
@@ -66242,7 +66242,7 @@
     KeyboardModule,
     KeyboardMoveSelectionModule,
     LabelEditingModule,
-    ModelingModule,
+    modeling,
     ModelingFeedbackModule,
     MoveModule,
     PaletteModule,
@@ -108313,8 +108313,12 @@
   			additionalModules: [
   				index$4,
   				MoveCanvasModule,
-  				ZoomScrollModule
-  			]
+  				ZoomScrollModule,
+  				modeling
+  			],
+  			moddleExtensions: {
+  				Workflow: workflowModdleDescriptor,
+  			}
   		});
   	};
   	this.createModeler = function (container, ppContainer) {

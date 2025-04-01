@@ -62,13 +62,15 @@
         let ppanel = document.getElementById("properties-panel");
         console.dir(ppanel);
 
-        var bpmnViewer = assets.createModeler(canvas, ppanel);
+        var bpmnViewer = assets.createViewer(canvas, ppanel);
 
         assets.registerDropZone(dropZone, ({ xml, name }) => {
             bpmnViewer.importXML(xml);
             alert(name);
         });
 
+        let modl = bpmnViewer.get('modeling');
+		console.dir(modl);
 
         document.getElementById('log').addEventListener('click', async () => {
             console.dir(bpmnViewer);
@@ -101,6 +103,7 @@
                 var canvas = bpmnViewer.get('canvas');
                 var overlays = bpmnViewer.get('overlays');
 
+				let registry = bpmnViewer.get('elementRegistry');
 
                 // zoom to fit full viewport
                 canvas.zoom('fit-viewport');
@@ -118,6 +121,17 @@
                 // add marker
                 canvas.addMarker('SCAN_OK', 'needs-discussion');
                 */
+
+				let modl = bpmnViewer.get('modeling');
+				console.dir(modl);
+
+				let act = registry.get('SequenceFlow_2')
+                console.dir(act);
+				modl.setColor(act, {
+					fill: '#e0f6de',
+					stroke: 'red'
+				});
+
             } catch (err) {
 
                 return console.error('could not import BPMN 2.0 diagram', err);
@@ -125,6 +139,7 @@
         }
 
         openDiagram(assets.defaultXml);
+
     </script>
 </body>
 </html>

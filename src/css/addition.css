@@ -7,7 +7,7 @@
 
 .bpmn-container .bpmn-pp-toggle {
 	position:absolute;
-	z-index:100;
+	z-index:70;
 	right:4px;
 	top:8px;
 }
@@ -19,7 +19,7 @@
 	bottom: 0;
 	width: 0;
 	background-color: var(--bgPrimary, #fbfbfb);
-	z-index: 100;
+	z-index: 69;
 	border-left: 1px solid #ccc;
 	overflow: auto;
 }
