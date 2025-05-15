@@ -156,14 +156,40 @@ async function saveXmlAndSvg(modeler) {
 
 	// saveSVG destroys main CSS table!
 	let el = document.createElement('div');
+
 	let clone = this.createViewer(el);
-	document.body.appendChild(el)
+	document.body.appendChild(el);
 	await clone.importXML(xml);
+
 	let svgResult = await clone.saveSVG();
+
 	el.remove();
+
+	// fit svg viewbox
+	let svgParser = new DOMParser();
+	let svgObj = svgParser.parseFromString(svgResult.svg, 'image/svg+xml');
+	let baseViewBox = svgObj.documentElement.viewBox.baseVal;
+
+	const WTH = 500;
+	const HTH = 300;
+
+	baseViewBox.width += 10;
+	baseViewBox.height += 10;
+	baseViewBox.y -= 5;
+
+	svgResult.svg = svgObj.documentElement.outerHTML;
+
+	let zoom = 1;
+	if (baseViewBox.width > WTH || baseViewBox.height > HTH)
+		zoom = Math.min(WTH / baseViewBox.width, HTH / baseViewBox.height);
 
 	return {
 		xml,
-		svg: svgResult.svg
+		svg: svgResult.svg,
+		rect: {
+			width: baseViewBox.width,
+			height: baseViewBox.height,
+		},
+		zoom
 	};
 }

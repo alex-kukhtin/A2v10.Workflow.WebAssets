@@ -39,6 +39,7 @@
         <div id="canvas" class="bpmn-canvas"></div>
         <div id="properties-panel" class="bpmn-props-panel open"></div>
         <button id="ppshow" class="bpmn-pp-toggle">Properties Panel</button>
+        <div id="svgresult" style="position:absolute;z-index:100;top:0;right:0;background-color:aqua;padding:10px"></div>
     </div>
 
 
@@ -62,7 +63,7 @@
         let ppanel = document.getElementById("properties-panel");
         console.dir(ppanel);
 
-        var bpmnViewer = assets.createViewer(canvas, ppanel);
+        var bpmnViewer = assets.createModeler(canvas, ppanel);
 
         assets.registerDropZone(dropZone, ({ xml, name }) => {
             bpmnViewer.importXML(xml);
@@ -85,6 +86,10 @@
         document.getElementById('xmlsvg').addEventListener('click', async () => {
             let res = await assets.saveXmlAndSvg(bpmnViewer);
             console.dir(res);
+
+            let resElem = document.getElementById('svgresult');
+            resElem.style.zoom = res.zoom;
+            resElem.innerHTML = res.svg;
         });
 
         /**
