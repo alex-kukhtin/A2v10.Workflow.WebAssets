@@ -8,6 +8,7 @@ import gridModule from 'diagram-js-grid';
 import ZoomScrollModule from 'diagram-js/lib/navigation/zoomscroll';
 import MoveCanvasModule from 'diagram-js/lib/navigation/movecanvas';
 import ColorPickerModule from 'bpmn-js-color-picker';
+import OutlineModule from 'bpmn-js/lib/features/outline';
 
 import modeling from 'bpmn-js/lib/features/modeling';
 
@@ -87,6 +88,7 @@ export default function() {
 				gridModule,
 				MoveCanvasModule,
 				ZoomScrollModule,
+				OutlineModule,
 				modeling
 			],
 			moddleExtensions: {

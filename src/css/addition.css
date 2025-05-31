@@ -77,3 +77,16 @@ input[type="checkbox"].bio-properties-panel-input {
 	height: unset;
 	position: unset;
 }
+
+.bio-properties-panel {
+	--group-background-color: var(--bgPrimary, white);
+	--input-background-color: var(--bgControl, hsl(225,10%,97%));
+	--input-focus-background-color: var(--bgControl, hsl(205,100%,95%));
+	--input-focus-border-color: var(--link, hsl(205, 100%, 50%));
+}
+
+.bio-properties-panel-textarea textarea:focus,
+.bio-properties-panel-textfield input:focus,
+.bio-properties-panel-select select:focus {
+	box-shadow: 0 0 1px 1px rgba(13,130,248,.3);
+}

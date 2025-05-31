@@ -158,7 +158,7 @@ function CorrelationId(props) {
 	return CheckboxEntry({
 		element: parameter,
 		id: idPrefix + '-correlationid',
-		label: translate('CorrelationId'),
+		label: 'Correlation Id',
 		getValue: () => parameter.CorrelationId || false,	
 		setValue
 	});

@@ -24,6 +24,9 @@
 			height: 100%;
 			padding: 0;
 			margin: 0;
+			--bgPrimary: #fbfbfb;
+            --bgControl: #fff;
+            --link: #208cf8;
 		}
 
         #log {
@@ -64,6 +67,15 @@
         console.dir(ppanel);
 
         var bpmnViewer = assets.createModeler(canvas, ppanel);
+        var eventBus = bpmnViewer.get('eventBus');
+
+		var selection = bpmnViewer.get('selection');
+        console.dir(eventBus);
+        eventBus.on('element.click', (ev) => {
+            console.dir(ev);
+            console.dir(selection.get());
+            //alert('click on ' + ev.element.id);
+        });
 
         assets.registerDropZone(dropZone, ({ xml, name }) => {
             bpmnViewer.importXML(xml);
