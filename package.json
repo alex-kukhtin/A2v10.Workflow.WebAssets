@@ -1,6 +1,6 @@
 {
 	"name": "workflow.web.assets",
-	"version": "10.1.8110",
+	"version": "10.1.8117",
 	"type": "module",
 	"description": "A2v10.Workflow.WebAssets",
 	"author": {
@@ -25,9 +25,9 @@
 		"@rollup/plugin-node-resolve": "^16.0.1",
 		"@rollup/plugin-terser": "^0.4.4",
 		"rollup-plugin-import-css": "^4.0.1",
-		"eslint": "^9.28.0",
+		"eslint": "^9.29.0",
 		"npm-run-all": "^4.1.5",
-		"rollup": "^4.41.1",
+		"rollup": "^4.43.0",
 		"serve": "^14.2.4"
 	},
 	"eslintConfig": {}

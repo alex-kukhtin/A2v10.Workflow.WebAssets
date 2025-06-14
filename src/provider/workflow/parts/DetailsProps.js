@@ -37,6 +37,10 @@ export default function DetailsProps(props) {
 			component: CalledElement
 		});
 		entries.push({
+			id: 'correlation-id',
+			component: CorrelationIdElement
+		});
+		entries.push({
 			id: 'parameters',
 			component: Parameters
 		});
@@ -167,6 +171,36 @@ function CalledElement(props) {
 		element,
 		id: 'called-element',
 		label: translate('Called Element'),
+		getValue,
+		setValue,
+		debounce
+	});
+}
+
+function CorrelationIdElement(props) {
+	const { element } = props;
+
+	const translate = useService('translate');
+	const debounce = useService('debounceInput');
+	const modeling = useService('modeling');
+
+	const setValue = (value) => {
+		modeling.updateProperties(element, {
+			correlationId: value
+		});
+	};
+
+	const getValue = (parameter) => {
+		return element.businessObject.correlationId ?? '';
+	};
+
+	return TextAreaEntry({
+		element,
+		id: 'correlation-Id',
+		label: translate('Correlation Id'),
+		rows: 1,
+		monospace: true,
+		description: translate('Expression'),
 		getValue,
 		setValue,
 		debounce
